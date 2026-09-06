@@ -6,6 +6,13 @@ not block automated checks.
 
 ## Latest follow-up
 
+- Optional PostgreSQL conversation store and atomic snapshot import are now
+  implemented. Real database tests verify parity with SQLite, owner isolation,
+  concurrent event ordering, rollback and import conflict handling. Initial
+  combined run: 545 passed; final import/core/parity run: 43 passed. No real
+  conversations moved and no paid provider tests ran. See
+  `POSTGRES_CONVERSATIONS.md`.
+
 - User requested only a cheaper Live model change. The existing API saved
   `gemini-2.5-flash-native-audio-preview-12-2025`; a subsequent runtime read
   confirmed it active, voice selection unchanged, no restart required and no

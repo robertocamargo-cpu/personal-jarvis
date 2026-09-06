@@ -1,5 +1,14 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: optional PostgreSQL conversation store (T2)
+
+The existing chat session/event shapes now have an owner-scoped PostgreSQL
+adapter and atomic snapshot import. macOS/PostgreSQL 15.19 execution passed
+545 combined storage/guard tests, then 43 import/core/parity tests. Windows/Linux
+share the implementation but were not executed; Neon and mobile access remain
+unverified. There is no import-time connection or runtime default change.
+See `POSTGRES_CONVERSATIONS.md` for scope and evidence.
+
 ## 2026-09-06: optional PostgreSQL identity adapter (T2)
 
 The existing identity repository contract now has an optional Psycopg 3 adapter.
