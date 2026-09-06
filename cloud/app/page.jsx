@@ -6,7 +6,7 @@ export default function Home() {
     <a className="button" href="/entrar">Entrar no Jarvis</a>
     <div className="grid">
       <article><span className="badge">Banco provisionado</span><h2>Conversas e memória</h2><p>O Neon já está conectado ao projeto. A migração do histórico para sua conta é a próxima etapa.</p></article>
-      <article><span className="badge">Em configuração</span><h2>Sua conta, seu Jarvis</h2><p>A entrada com Google está sendo configurada. Conversas, voz e conexão com o Mac continuam em preparação.</p></article>
+      <article><span className="badge">Acesso pessoal</span><h2>Sua conta, seu Jarvis</h2><p>Entre com Google para identificar sua conta. Conversas, voz e conexão com o Mac continuam em preparação.</p></article>
     </div>
   </>;
 }

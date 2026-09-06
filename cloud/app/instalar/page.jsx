@@ -11,7 +11,7 @@ export default function InstallPage() {
       <article><h2>iPhone ou iPad</h2><ol><li>Abra este endereço no Safari.</li><li>Toque em Compartilhar.</li><li>Escolha Adicionar à Tela de Início e confirme.</li></ol></article>
       <article><h2>Android</h2><ol><li>Abra este endereço no Chrome.</li><li>Abra o menu de três pontos.</li><li>Escolha Instalar aplicativo ou Adicionar à tela inicial e confirme.</li></ol></article>
     </div>
-    <p className="muted">É necessário estar conectado à internet. O login com Google está em configuração; conversa, voz e aprovações remotas ainda estão em preparação.</p>
+    <p className="muted">É necessário estar conectado à internet. Entre com Google para identificar sua conta. Conversa, voz e aprovações remotas ainda estão em preparação.</p>
     <a className="button" href="/">Voltar ao Jarvis</a>
   </>;
 }

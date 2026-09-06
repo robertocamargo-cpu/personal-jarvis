@@ -30,6 +30,13 @@ authentication or personal data.
 
 ## Current evidence, 2026-09-06
 
+Follow-up: the user completed Vercel 2FA and explicitly confirmed adding
+`https://jarvis-bob.vercel.app` to Neon's trusted domains. The console lists the
+saved domain and Google Shared keys. The direct Google initiation probe now
+returns HTTP 200 instead of `INVALID_CALLBACKURL`. Production login is enabled
+through `JARVIS_CLOUD_LOGIN_ENABLED=true`; actual account acceptance remains
+separate from successful OAuth initiation.
+
 - Production build completed with Node 22 on macOS, using Next's official WASM
   compiler after the optional native packages were omitted to reduce disk use.
 - Three policy tests passed. The HTTP contract passed against the production
@@ -52,8 +59,9 @@ pairing, never a shared owner or the first visitor to the public URL.
 
 `npm test` in `cloud/` checks the portable authorization policy.
 `JARVIS_CLOUD_TEST_URL=<origin> node tests/http-contract.mjs` checks the deployed
-HTTP boundary while login is gated. Once login is enabled, replace the setup
-gate assertion with authenticated end-to-end acceptance on a test branch.
+HTTP boundary while login is gated. With login enabled, set
+`JARVIS_CLOUD_TEST_LOGIN_ENABLED=true` to verify Google initiation instead of
+the setup gate. This does not replace authenticated end-to-end acceptance.
 
 Reference implementation:
 [Neon Next.js quickstart](https://neon.com/docs/auth/quick-start/nextjs-api-only)

@@ -23,9 +23,15 @@ for (const origin of [null, "https://evil.example"]) {
 const session = await fetch(new URL("/api/auth/get-session", base));
 assert.equal(session.status, 200);
 assert.equal(await session.json(), null);
-const disabled = await fetch(new URL("/api/auth/sign-in/social", base), {
+const signIn = await fetch(new URL("/api/auth/sign-in/social", base), {
   method: "POST", headers: { origin: "https://jarvis-bob.vercel.app", "content-type": "application/json" },
-  body: JSON.stringify({ provider: "google", callbackURL: "https://jarvis-bob.vercel.app/conta" }),
+  body: JSON.stringify({ provider: "google", callbackURL: "https://jarvis-bob.vercel.app/conta", disableRedirect: true }),
 });
-assert.equal(disabled.status, 503, "Sign-in remains disabled until callback setup is verified");
-console.log("Cloud HTTP contract passed: pages, session rejection, owner parameter isolation, redirect, CSRF, anonymous session and setup gate.");
+if (process.env.JARVIS_CLOUD_TEST_LOGIN_ENABLED === "true") {
+  assert.equal(signIn.status, 200, "Configured Google flow starts successfully");
+  const result = await signIn.json();
+  assert.equal(new URL(result.url).protocol, "https:");
+} else {
+  assert.equal(signIn.status, 503, "Sign-in remains disabled until callback setup is verified");
+}
+console.log("Cloud HTTP contract passed: pages, session rejection, owner parameter isolation, redirect, CSRF and expected login state.");
