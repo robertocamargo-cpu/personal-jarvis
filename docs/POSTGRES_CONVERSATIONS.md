@@ -1,5 +1,23 @@
 # PostgreSQL conversation storage
 
+## Migration verification follow-up
+
+`agent_chat/migration.py` reads a consistent SQLite transaction, including
+committed WAL data, without creating or migrating the source database. It
+rejects orphaned events rather than silently discarding them. Canonical SHA-256
+digests compare all session metadata and ordered events without printing text.
+
+Migration defaults to dry-run. Before writing, it checks all existing target
+sessions and refuses any differing record. Explicit application imports one
+conversation atomically, verifies it, and can resume after interruption by
+skipping identical already-imported records. The source and destination should
+be quiescent during cutover; this is not continuous replication.
+
+Real PostgreSQL migration tests and mandatory guards: 538 passed. Tests cover
+interrupted migration, idempotent retry, preflight conflict refusal and source
+preservation. The pure storage protocol is platform-independent; macOS was
+executed, Windows/Linux and real Neon network behavior remain unverified.
+
 2026-09-06 — T2: optional adapter for the existing agent-chat storage surface.
 
 `agent_chat/postgres_store.py` provides `PostgresAgentChatStore` using the existing

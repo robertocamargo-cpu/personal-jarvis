@@ -175,3 +175,75 @@ def test_failed_import_does_not_leave_a_partial_conversation(database):
             destination.import_session(snapshot, list(reversed(events)))
     finally:
         source.close()
+
+
+def test_migration_defaults_to_dry_run_and_resumes_without_duplicates(database, tmp_path):
+    from jarvis.agent_chat.migration import migrate_chat_snapshots, read_chat_snapshots
+
+    destination, _, _ = database
+    path = tmp_path / "source.db"
+    source = AgentChatStore(path)
+    try:
+        for sid in ("a", "b"):
+            create(source, sid)
+            source.append_event(sid, event("user_message", "Projeto Jarvis Alpha"))
+        snapshots = read_chat_snapshots(path)  # Read committed WAL with the source still open.
+        report = migrate_chat_snapshots(snapshots, destination)
+        assert report == {
+            "dry_run": True,
+            "sessions": 2,
+            "events": 2,
+            "already_present": 0,
+            "pending": 2,
+            "imported": 0,
+        }
+        assert destination.list_sessions() == []
+
+        class InterruptedDestination:
+            def get_session(self, sid):
+                return destination.get_session(sid)
+
+            def list_events(self, sid):
+                return destination.list_events(sid)
+
+            def import_session(self, session, events):
+                if session.session_id == "b":
+                    raise ConnectionError("simulated interrupted connection")
+                destination.import_session(session, events)
+
+        with pytest.raises(ConnectionError):
+            migrate_chat_snapshots(snapshots, InterruptedDestination(), apply=True)
+        assert destination.get_session("a") is not None
+        report = migrate_chat_snapshots(snapshots, destination, apply=True)
+        assert report["already_present"] == 1
+        assert report["imported"] == 1
+        assert report["pending"] == 0
+        assert migrate_chat_snapshots(snapshots, destination, apply=True)["imported"] == 0
+        assert [item.digest() for item in read_chat_snapshots(path)] == [
+            item.digest() for item in snapshots
+        ]
+    finally:
+        source.close()
+
+
+def test_migration_conflict_is_detected_before_any_write(database, tmp_path):
+    from jarvis.agent_chat.migration import (
+        ChatMigrationConflict,
+        migrate_chat_snapshots,
+        read_chat_snapshots,
+    )
+
+    destination, _, _ = database
+    source = AgentChatStore(tmp_path / "source.db")
+    try:
+        create(source, "a")
+        create(source, "b")
+        snapshots = read_chat_snapshots(tmp_path / "source.db")
+        create(destination, "b")
+        destination.update_session("b", title="Different conversation")
+        with pytest.raises(ChatMigrationConflict):
+            migrate_chat_snapshots(snapshots, destination, apply=True)
+        assert destination.get_session("a") is None
+        assert destination.get_session("b").title == "Different conversation"
+    finally:
+        source.close()

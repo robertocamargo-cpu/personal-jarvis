@@ -27,6 +27,14 @@ class IdentityRepository(Protocol):
         """Atomically save the next revision, returning false for a stale writer."""
         ...
 
+
+class ChatSnapshotDestination(Protocol):
+    """Owner-bound chat storage seam for explicit snapshot migration."""
+
+    def get_session(self, session_id: str) -> Any | None: ...
+    def list_events(self, session_id: str, *, after_seq: int = 0) -> list[dict[str, Any]]: ...
+    def import_session(self, session: Any, events: list[dict[str, Any]]) -> None: ...
+
 # ----------------------------------------------------------------------
 # Audio Data-Types
 # ----------------------------------------------------------------------

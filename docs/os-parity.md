@@ -1,5 +1,13 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: explicit chat migration seam (T3, storage only)
+
+The core snapshot destination protocol supports read-only SQLite snapshots,
+dry-run comparison and resumable PostgreSQL import. No runtime config/boot path
+changed. Real database and required guard tests passed (538) on macOS; other
+OSes and Neon are unverified. No model call is involved in this seam, so it does
+not replace the earlier Gemini one-key runtime acceptance evidence.
+
 ## 2026-09-06: optional PostgreSQL conversation store (T2)
 
 The existing chat session/event shapes now have an owner-scoped PostgreSQL
