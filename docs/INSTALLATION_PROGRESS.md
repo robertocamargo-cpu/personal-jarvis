@@ -82,6 +82,16 @@ CRUD, deployment, mobile pairing and human audio acceptance remain pending.
 
 ## Continuation check: local source unavailable
 
+Follow-up: the user explicitly chose a fresh history instead of recovery. The
+managed macOS launcher was rebuilt and its runtime identity verified. The
+default instance now serves port 47821, with permanent checkout-local data,
+the recovered Gemini credential, Portuguese reply/recognition pins, Jarvis
+identity and the existing Gemini 2.5 native-audio model pin. First-run completion
+and the subsequent restart were verified by API and browser. Microphone,
+desktop-control and global-shortcut permissions remain incomplete; wake-word
+activation is disabled. The recovery prerequisite below is superseded for
+this user's fresh installation, not a claim that old data was recovered.
+
 The production deployment remains Ready at the Google sign-in commit. Public
 HTTP authentication and PWA checks passed again without paid provider calls.
 Earlier local health and history evidence above is historical: the development
@@ -96,3 +106,20 @@ conversations or assigning their cloud owner. Once recovered, put durable
 runtime state outside temporary storage, preserve a consistent SQLite backup,
 and reconcile snapshot counts and digests before any cutover. Cloud login
 availability does not establish local worker health or completed migration.
+
+## Neon branch validation
+
+T1: a manual, synthetic SQL smoke test; no application contract changes.
+
+After explicit approval for the Vercel-integrated Neon sign-in, a schema-only
+`dev-jarvis-link` branch was created with one-day automatic expiration. Its
+SQL Editor executed `scripts/ci/neon_transaction_smoke.sql`: composite keys,
+owner-filtered selection, Portuguese JSONB text and savepoint restoration all
+returned true. The final rollback removed the temporary table, confirmed by
+`to_regclass`. No production application or authentication tables were changed.
+
+This validates SQL behavior, not application authorization, Python adapter
+network behavior or completed Mac/cloud pairing. Export of all production
+environment variables was rejected by automatic approval review; no secrets
+were exported. Full adapter tests still require a connection scoped to the
+disposable branch. Recreate an isolated branch if this one has expired.
