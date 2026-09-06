@@ -1,5 +1,16 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: opt-in assistant identity foundation (T3)
+
+The new identity repository/service uses standard Python and SQLite on macOS,
+Linux and Windows, without an OS-specific backend or native capability. Its
+availability probe is opening the explicitly supplied SQLite database; failures
+propagate rather than presenting a false saved state. It is not initialized at
+boot and has no runtime settings surface yet. Ten contract tests passed on
+macOS. Linux/Windows execution and fresh-install end-to-end integration remain
+unverified; see [IDENTITY_FOUNDATION.md](IDENTITY_FOUNDATION.md). Existing
+Gemini conversation, voice, wake settings and legacy name resolution are unchanged.
+
 **Binding rule:** [`CLAUDE.md`](../CLAUDE.md) §3 *"OS feature parity — macOS
 and Linux are first-class"*. Every feature ships working on Windows, macOS,
 and Linux (desktop AND headless) in the same change. A Windows-only

@@ -1,5 +1,9 @@
 # Identity migration plan — proposed, not implemented
 
+Follow-up 2026-09-06: the opt-in domain/repository foundation is now implemented
+and tested. Runtime migration and the editable identity surface remain proposed.
+See [IDENTITY_FOUNDATION.md](IDENTITY_FOUNDATION.md) for exact scope and evidence.
+
 Evidence date: 2026-09-06. Reference commit:
 `4c858fa8822e95e5edc9cf097889930befe9308c`.
 

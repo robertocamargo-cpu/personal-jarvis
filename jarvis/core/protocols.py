@@ -15,6 +15,18 @@ from dataclasses import dataclass, field
 from typing import Any, Literal, Protocol, runtime_checkable
 from uuid import UUID
 
+
+class IdentityRepository(Protocol):
+    """Storage seam for owner-scoped, revisioned assistant display identity."""
+
+    def load(self, user_id: str) -> dict[str, Any] | None: ...
+
+    def compare_and_swap(
+        self, user_id: str, expected_revision: int, payload: dict[str, Any],
+    ) -> bool:
+        """Atomically save the next revision, returning false for a stale writer."""
+        ...
+
 # ----------------------------------------------------------------------
 # Audio Data-Types
 # ----------------------------------------------------------------------
