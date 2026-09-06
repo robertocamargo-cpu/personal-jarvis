@@ -1,5 +1,12 @@
 # PersonalJarvis baseline — 2026-09-06
 
+> Follow-up 2026-09-06: the initial blocked statuses below are a historical
+> snapshot. Gemini, live text conversation, controlled restart, and restored
+> conversational context have now passed. See the continuation evidence at the
+> end of this document. Brazilian Portuguese required an authorized source fix;
+> that result is not attributed to the untouched upstream commit.
+
+
 Status: **PARTIAL / NOT ACCEPTED**. The original server, web UI, HTTP API and
 WebSocket work. A real model conversation and `JARVIS_OK` are not verified.
 Do not interpret passing unit tests, a healthy HTTP endpoint, or an echo as
@@ -214,3 +221,53 @@ Local transient logs: `/private/tmp/jarvis-baseline-install.log`,
 `jarvis-frontend-tests-node22.log`, `jarvis-build.log`, and
 `jarvis-baseline-runtime.log`. These are evidence for this machine, not portable
 or committed artifacts. Do not publish raw runtime logs or credential stores.
+
+## Continuation evidence — Brazilian Portuguese and restored conversation
+
+The user requires Brazilian Portuguese (`pt-BR`) for conversation, independently
+of the interface language. The existing STT catalog accepts `pt`; the reply pin
+now exposes `pt` as **Português (Brasil)** and names it **Brazilian Portuguese** in
+the brain/realtime prompt. Pipeline output maps it to BCP-47 `pt-BR`.
+
+Before the language fix, the live Gemini chat returned exactly `JARVIS_OK` for the
+requested minimum test. A subsequent Portuguese request incorrectly produced
+Spanish, proving that a custom instruction alone did not fix the original
+three-language resolver. The new contract corrects this routing and adds output
+validation for Portuguese. The configured reply pin and recognition language are
+both persisted as `pt`; the custom conversation preference also specifies Brazil.
+
+With explicit user approval, the development process was terminated using SIGTERM
+and started again with the same configuration and data. Approval review initially
+questioned the paths; the original log and matching conversation records verified
+`/private/tmp/jarvis-baseline-runtime/jarvis.toml` and `agent_chat.db` before retrying.
+The restarted instance returned health 200 and restored the existing Gemini chat.
+Without repeating the reference, asking for it produced:
+
+> A palavra de referência que você informou anteriormente é jabuticaba-quatrocentos e oitenta e dois.
+
+The retained reference was `jabuticaba-482`. This proves persisted conversation
+context in the front-page agent chat across a real process restart. It does not
+prove long-term recall across independent conversations or native wake-word audio.
+The browser Settings UI showed Portuguese recognition and Português (Brasil)
+selected for replies. Microphone capture was separately validated in the previous
+follow-up (`BROWSER_MICROPHONE_FIX.md`).
+
+Validation: 125 targeted backend tests, 73 frontend language/onboarding tests,
+537 routing/output/hangup/language/REST guards, plus the focused language contract
+including pipeline `pt-BR` mapping. TypeScript/build/worklet checks passed. Existing
+Starlette deprecation and catalog duplicate-operation warnings remain. Targeted
+Ruff checks pass except existing issues in the large upstream brain manager;
+no broad unrelated cleanup was applied.
+
+Milestone 1 audit documents are delivered. The functional headless startup/chat/
+history/restart checks now pass, with these remaining acceptance limits:
+
+- The untouched upstream tag must not claim the Brazilian Portuguese behavior:
+  it required a source change after the original `JARVIS_OK` result.
+- Native desktop speech, speaker output, wake-word operation, and Windows/Linux
+  runtime execution are not certified by the browser checks.
+- Previously documented watchdog-dependent optional tests and outdated headless
+  lifecycle fakes remain upstream test-suite issues; no full-suite green claim.
+- No cloud database migration, new channel, production deployment, or baseline
+  release tag was performed in this continuation. Milestones 0/1 remain the
+  review boundary before adding the larger project capabilities.

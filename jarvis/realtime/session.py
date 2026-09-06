@@ -1944,7 +1944,7 @@ _REALTIME_SAFETY_APPENDIX = (
     "delivered it to the user. Never repeat or paraphrase an earlier tagged "
     "result in a later turn unless the user explicitly asks for a repeat."
 )
-_LANGUAGE_NAMES = {"de": "German", "en": "English", "es": "Spanish"}
+_LANGUAGE_NAMES = {"de": "German", "en": "English", "es": "Spanish", "pt": "Brazilian Portuguese"}
 
 _REALTIME_ENDING_SECTION_RE = re.compile(
     r"(?ms)^ENDING THE CALL[ \t]*\r?\n.*?(?=^CONTEXT[ \t]*(?:\r?\n|\Z)|\Z)"

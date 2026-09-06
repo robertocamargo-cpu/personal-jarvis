@@ -2094,9 +2094,11 @@ def _extract_leaked_tool_call(text: str) -> tuple[str, dict[str, Any]] | None:
 
 # Single source of truth for the reply-language vocabulary (Python ↔ REST ↔ TS).
 # "auto" = mirror the user's input language; the rest hard-pin that language.
-SUPPORTED_REPLY_LANGUAGES: tuple[str, ...] = ("auto", "de", "en", "es")
+SUPPORTED_REPLY_LANGUAGES: tuple[str, ...] = ("auto", "de", "en", "es", "pt")
 _REPLY_LANGS: frozenset[str] = frozenset(SUPPORTED_REPLY_LANGUAGES)
-_REPLY_LANG_NAMES: dict[str, str] = {"de": "German", "en": "English", "es": "Spanish"}
+_REPLY_LANG_NAMES: dict[str, str] = {
+    "de": "German", "en": "English", "es": "Spanish", "pt": "Brazilian Portuguese",
+}
 
 # Spoken confirmation for a deterministic reply-language switch (the
 # voice_command_gate "language_switch" path). Keyed by target code and phrased
@@ -2104,6 +2106,7 @@ _REPLY_LANG_NAMES: dict[str, str] = {"de": "German", "en": "English", "es": "Spa
 # resolves to the new language and the switch is audible. "auto" has no single
 # language, so it confirms in the default locale (German).
 _LANG_SWITCH_CONFIRM: dict[str, str] = {
+    "pt": "Pronto, vou responder em português do Brasil.",
     "de": "Erledigt — ich antworte ab jetzt auf Deutsch.",
     "en": "Done — I'll reply in English from now on.",
     "es": "Listo — a partir de ahora respondo en español.",

@@ -3098,6 +3098,7 @@
     "stt_section": "Voice Recognition Language",
     "stt_hint": "Which language your spoken voice is recognised and turned into text. Automatic detects it for you. After changing this, end any Realtime call and restart Jarvis for Pipeline mode.",
     "options": {
+      "pt": {"label": "Português (Brasil)", "description": "Replies in Brazilian Portuguese."},
       "auto": {
         "label": "Automatic",
         "description": "Match whichever language you use."
@@ -3116,6 +3117,7 @@
       }
     },
     "reply_options": {
+      "pt": "Replies in Brazilian Portuguese.",
       "auto": "{name} mirrors whichever language you speak or type.",
       "en": "{name} answers in English.",
       "de": "{name} antwortet auf Deutsch.",

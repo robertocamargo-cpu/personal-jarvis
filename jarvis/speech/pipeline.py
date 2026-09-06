@@ -16879,7 +16879,7 @@ class SpeechPipeline:
         },
     }
 
-    _BCP47: dict[str, str] = {"de": "de-DE", "en": "en-US", "es": "es-ES"}
+    _BCP47: dict[str, str] = {"de": "de-DE", "en": "en-US", "es": "es-ES", "pt": "pt-BR"}
 
     @classmethod
     def _bcp47(cls, lang: object) -> str | None:

@@ -3,6 +3,7 @@
 The desktop "Languages" view writes the Reply Language through this endpoint.
 Before this existed the choice died in localStorage and Jarvis ignored it.
 """
+
 from __future__ import annotations
 
 from collections.abc import Iterator
@@ -28,7 +29,7 @@ class _FakeBrain:
 
     def set_reply_language(self, lang: str) -> None:
         code = lang.strip().lower()
-        if code not in {"auto", "de", "en", "es"}:
+        if code not in {"auto", "de", "en", "es", "pt"}:
             raise ValueError(f"unknown reply language {lang!r}")
         self._reply_language = code
 
@@ -61,7 +62,7 @@ def test_get_returns_current_language_and_options(server: WebServer) -> None:
         assert resp.status_code == 200
         body = resp.json()
         assert body["language"] == "auto"
-        assert set(body["options"]) == {"auto", "de", "en", "es"}
+        assert set(body["options"]) == {"auto", "de", "en", "es", "pt"}
 
 
 def test_put_switches_live_brain(server: WebServer) -> None:
@@ -158,3 +159,11 @@ def test_bar_size_put_rejects_out_of_range(server: WebServer) -> None:
     with TestClient(server.app) as client:
         assert client.put("/api/settings/bar-size", json={"scale": 5.0}).status_code == 422
         assert client.put("/api/settings/bar-size", json={"scale": 0.1}).status_code == 422
+
+
+def test_put_brazilian_portuguese_persists(server: WebServer, _no_toml_write: list[str]) -> None:
+    with TestClient(server.app) as client:
+        response = client.put("/api/settings/reply-language", json={"language": "pt"})
+        assert response.status_code == 200
+        assert response.json()["language"] == "pt"
+        assert "pt" in _no_toml_write

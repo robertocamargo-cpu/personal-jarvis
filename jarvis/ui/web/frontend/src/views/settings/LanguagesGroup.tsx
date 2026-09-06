@@ -19,7 +19,7 @@ import {
 import { LanguageSelect } from "@/components/ui/language-select";
 
 const UI_OPTIONS: UiLanguage[] = ["en", "de", "es"];
-const REPLY_OPTIONS: ReplyLanguage[] = ["auto", "en", "de", "es"];
+const REPLY_OPTIONS: ReplyLanguage[] = ["auto", "en", "de", "es", "pt"];
 
 /**
  * "Languages" group inside the Settings view — the interface-language and

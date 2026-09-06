@@ -28,7 +28,7 @@ import { useEventStore } from "@/store/events";
 export type UiLanguage = "en" | "de" | "es";
 // "auto" mirrors the user's input language; the rest hard-pin the reply language.
 // Mirrors jarvis/brain/manager.py::SUPPORTED_REPLY_LANGUAGES (single source of truth).
-export type ReplyLanguage = "auto" | "en" | "de" | "es";
+export type ReplyLanguage = "auto" | "en" | "de" | "es" | "pt";
 // "auto" lets the recogniser detect the spoken language per utterance (the
 // default); a concrete code forces what it transcribes into. Deliberately a
 // plain string, not a union: the accepted set is every language the recogniser
@@ -45,7 +45,7 @@ const STT_FALLBACK_OPTIONS: readonly string[] = ["auto"];
 const REPLY_LANGUAGE_ENDPOINT = "/api/settings/reply-language";
 const UI_LANGUAGE_ENDPOINT = "/api/settings/ui-language";
 const STT_LANGUAGE_ENDPOINT = "/api/settings/stt-language";
-const REPLY_VALUES: readonly ReplyLanguage[] = ["auto", "en", "de", "es"];
+const REPLY_VALUES: readonly ReplyLanguage[] = ["auto", "en", "de", "es", "pt"];
 
 function isUiLanguage(v: unknown): v is UiLanguage {
   return v === "en" || v === "de" || v === "es";

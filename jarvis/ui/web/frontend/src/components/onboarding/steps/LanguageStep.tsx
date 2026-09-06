@@ -66,6 +66,7 @@ export function LanguageStep({ goNext, goBack, setSummary }: StepProps) {
           onValueChange={(value) => setReplyLanguage(value as ReplyLanguage)}
           options={[
             { value: "auto", label: t("onboarding.language.auto") },
+            { value: "pt", label: t("languages_view.options.pt.label") },
             { value: "en", label: "English" },
             { value: "de", label: "Deutsch" },
             { value: "es", label: "Español" },

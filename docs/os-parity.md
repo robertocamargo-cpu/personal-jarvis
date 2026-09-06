@@ -301,3 +301,26 @@ shortcuts it never created. Covered by
 - Re-audit cadence: rerun the five-area sweep after any release that touches
   platform seams (`jarvis/platform/`, `jarvis/cu/actuate/`, `jarvis/vision/`,
   `jarvis/audio/`, `jarvis/missions/isolation/`).
+
+## Brazilian Portuguese conversation support — 2026-09-06
+
+Tier T3: the reply-language vocabulary now includes `pt`, named Brazilian
+Portuguese in the brain and realtime instructions. Recognition uses the existing
+`pt` capability; the speech pipeline maps output to BCP-47 `pt-BR`. Interface
+locales remain English, German and Spanish. Settings and onboarding expose the
+new reply option with matching command and REST catalogs.
+
+| Cell | Implementation | Evidence / limitations |
+| --- | --- | --- |
+| macOS browser/headless | Shared resolver, explicit reply pin, Gemini | Live API-key conversation and history recovery across process restart passed in Brazilian Portuguese |
+| macOS desktop | Same resolver and TTS locale mapping | Native wake-word/audio capture not validated; browser permission is separate |
+| Windows desktop/headless | Same pure Python/REST/TypeScript code | No OS-specific changes; runtime not exercised on Windows |
+| Linux desktop/headless | Same pure Python/REST/TypeScript code | No OS-specific changes; runtime not exercised on Linux |
+
+`tests/contract/language/test_brazilian_portuguese.py` covers Portuguese detection,
+BCP-47 normalization, explicit pin precedence, Spanish-output rejection and
+brain/command agreement. REST tests cover acceptance and persistence. The existing
+routing, output-filter, hangup parity and turn-language guards are required.
+This does not claim a complete Portuguese translation of every prewritten tool
+status/error phrase or a Portuguese interface. Those remain a localization gap;
+normal model-generated conversation uses the explicit Brazilian Portuguese pin.

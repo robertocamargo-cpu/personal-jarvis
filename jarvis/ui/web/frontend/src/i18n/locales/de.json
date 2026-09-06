@@ -3098,6 +3098,7 @@
     "stt_section": "Erkennungssprache (Stimme)",
     "stt_hint": "In welcher Sprache deine Stimme erkannt und in Text umgewandelt wird. Automatisch erkennt sie selbst. Beende nach einer Änderung jeden Realtime-Anruf und starte Jarvis für den Pipeline-Modus neu.",
     "options": {
+      "pt": {"label": "Português (Brasil)", "description": "Antwortet auf brasilianischem Portugiesisch."},
       "auto": {
         "label": "Automatisch",
         "description": "Passt sich der Sprache an, die du nutzt."
@@ -3116,6 +3117,7 @@
       }
     },
     "reply_options": {
+      "pt": "Antwortet auf brasilianischem Portugiesisch.",
       "auto": "{name} spiegelt die Sprache, die du sprichst oder schreibst.",
       "en": "{name} antwortet auf Englisch.",
       "de": "{name} antwortet auf Deutsch.",

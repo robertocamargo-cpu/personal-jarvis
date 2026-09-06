@@ -54,7 +54,7 @@ DEFAULT_LOCALE = "en"
 
 #: The codes an explicit ``brain.reply_language`` pin may carry (``"auto"`` is
 #: deliberately absent — it means "no pin, mirror the input").
-_REPLY_PINS: frozenset[str] = frozenset({"de", "en", "es"})
+_REPLY_PINS: frozenset[str] = frozenset({"de", "en", "es", "pt"})
 
 #: A turn with at most this many word tokens is a "thin" turn — a one- or
 #: two-word interjection ("Now", "Stop now", "jetzt", a lone loanword). A thin
@@ -162,15 +162,26 @@ _ES_TOKENS: frozenset[str] = frozenset({
     "escribe", "y", "pero", "con", "del", "al", "muy", "bien", "clima",
 })
 
+_PT_SCRIPT_RE = re.compile(r"[ãõÃÕ]")
+_PT_TOKENS: frozenset[str] = frozenset({
+    "você", "vocês", "voce", "voces", "não", "nao", "uma", "meu", "minha",
+    "nosso", "nossa", "seu", "sua", "hoje", "amanhã", "obrigado", "obrigada",
+    "posso", "pode", "quero", "preciso", "fazer", "ajudar", "ajude", "então",
+    "também", "português", "brasileiro", "conversa", "responda", "apenas",
+    "organizar", "palavra", "teste", "referência", "sem", "com", "ou", "eu",
+})
+
 _SETS: tuple[tuple[str, frozenset[str]], ...] = (
     ("de", _DE_TOKENS),
     ("en", _EN_TOKENS),
     ("es", _ES_TOKENS),
+    ("pt", _PT_TOKENS),
 )
 
 # Whisper cloud APIs return language NAMES; local faster-whisper returns ISO
 # codes; some TTS configs use BCP-47. All collapse to de/en/es here.
 _TAG_TO_CODE: dict[str, str] = {
+    "pt": "pt", "por": "pt", "portuguese": "pt", "português": "pt",
     "de": "de", "deu": "de", "ger": "de", "german": "de", "deutsch": "de",
     "en": "en", "eng": "en", "english": "en", "englisch": "en",
     "es": "es", "spa": "es", "spanish": "es", "spanisch": "es",
@@ -202,6 +213,8 @@ def detect_text_language(text: str) -> str:
         scores["de"] += 2
     if _ES_SCRIPT_RE.search(t):
         scores["es"] += 2
+    if _PT_SCRIPT_RE.search(t):
+        scores["pt"] += 2
     best_code, best = max(scores.items(), key=lambda kv: kv[1])
     if best == 0 or sum(1 for s in scores.values() if s == best) > 1:
         return "unknown"
@@ -248,6 +261,8 @@ def _detect_strong_supported_output(text: str, tokens: list[str]) -> str:
         scores["de"] += 2
     if _ES_SCRIPT_RE.search(text):
         scores["es"] += 2
+    if _PT_SCRIPT_RE.search(text):
+        scores["pt"] += 2
     ranked = sorted(scores.items(), key=lambda item: item[1], reverse=True)
     (best_code, best_score), (_, second_score) = ranked[:2]
     if best_score < 3 or best_score == second_score:
@@ -408,7 +423,7 @@ def resolve_output_language(
     mirror the input". ``conversation_language`` (de/en/es) is the language of
     the conversation so far; pass ``""`` when none is established yet.
     """
-    pin = str(reply_language or "").strip().lower()
+    pin = normalize_language_tag(reply_language)
     if pin in _REPLY_PINS:
         return pin
     conv = str(conversation_language or "").strip().lower()
