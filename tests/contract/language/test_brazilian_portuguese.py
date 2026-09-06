@@ -65,3 +65,14 @@ def test_browser_voice_error_does_not_switch_to_german():
     result = scrub_for_voice("Traceback (most recent call last):", language=session._lang_short())
     assert result.fallback_used
     assert result.cleaned == "Ocorreu um erro."
+
+
+def test_realtime_language_failure_keeps_portuguese():
+    from jarvis.realtime.session import RealtimeVoiceSession, _PUBLIC_FACT_UNCERTAINTY
+
+    session = RealtimeVoiceSession.__new__(RealtimeVoiceSession)
+    session._language = "pt"
+    assert session._output_language_failure_phrase() == (
+        "Não consegui gerar uma resposta segura em português brasileiro agora."
+    )
+    assert "fonte pública" in _PUBLIC_FACT_UNCERTAINTY["pt"]

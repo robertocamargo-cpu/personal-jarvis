@@ -1043,11 +1043,13 @@ _HISTORY_LOST_INSTRUCTION = (
     "words and treat them as the start of the conversation."
 )
 _OUTPUT_LANGUAGE_FAILURE: dict[str, str] = {
+    "pt": "Não consegui gerar uma resposta segura em português brasileiro agora.",
     "de": "Ich konnte gerade keine sichere Antwort auf Deutsch erzeugen.",  # i18n-allow
     "en": "I couldn't produce a safe answer in English just now.",
     "es": "No pude generar una respuesta segura en español ahora mismo.",  # i18n-allow
 }
 _PUBLIC_FACT_UNCERTAINTY: dict[str, str] = {
+    "pt": "Não consegui confirmar essa informação com uma fonte pública confiável agora.",
     "de": (  # i18n-allow
         "Ich konnte das gerade nicht zuverlässig mit einer öffentlichen "  # i18n-allow
         "Quelle prüfen."  # i18n-allow
