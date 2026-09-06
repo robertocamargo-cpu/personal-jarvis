@@ -1,5 +1,25 @@
 # PostgreSQL conversation storage
 
+## Neon adapter verification, 2026-09-06
+
+The existing chat and identity PostgreSQL contracts ran against an isolated,
+schema-only Neon branch: **11 passed in 17.25 seconds**. Each test created a
+random schema containing synthetic records and removed it in fixture cleanup.
+This covers chat parity, owner separation, concurrent appends, rollback,
+snapshot import, interrupted migration, and identity revision conflicts.
+
+The runner opened only the test branch endpoint. The database credential was
+retrieved individually and kept in process memory; no environment export or
+secret file was created. TLS used `sslmode=verify-full`, required channel
+binding, and the installed Certifi CA bundle. System-root resolution alone
+failed with this local Psycopg runtime; weakening certificate verification was
+not needed.
+
+Execution was on macOS against Neon PostgreSQL. Windows and Linux execution
+remain unverified. These tests exercise caller-supplied synthetic owners; they
+do not establish authenticated Mac/cloud pairing. The active application store
+remains local SQLite, with a fresh history explicitly chosen by the user.
+
 ## Migration verification follow-up
 
 `agent_chat/migration.py` reads a consistent SQLite transaction, including
@@ -72,7 +92,8 @@ Psycopg adapter; those runtimes and Neon connectivity remain unverified.
 
 ## Remaining cloud work
 
-Establish the dedicated Neon project, TLS credentials and authenticated owner
-mapping; verify the adapter on a disposable Neon branch; prepare consistent
-export/import and reconcile counts before changing the active store. Tasks,
-execution records, cloud authentication and mobile access remain separate steps.
+The dedicated Neon project, managed cloud login, TLS connection and disposable
+branch adapter verification are complete. Establish authenticated installation
+pairing before changing the active store. Existing snapshot migration remains
+available for other installations; this installation starts with fresh history.
+Tasks, execution records and remote chat/voice remain separate steps.

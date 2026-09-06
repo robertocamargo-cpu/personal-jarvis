@@ -121,5 +121,9 @@ returned true. The final rollback removed the temporary table, confirmed by
 This validates SQL behavior, not application authorization, Python adapter
 network behavior or completed Mac/cloud pairing. Export of all production
 environment variables was rejected by automatic approval review; no secrets
-were exported. Full adapter tests still require a connection scoped to the
-disposable branch. Recreate an isolated branch if this one has expired.
+were exported. The subsequent narrow read retrieved only the database credential
+into process memory and connected exclusively to the disposable branch endpoint.
+With full TLS verification and Certifi roots, all 11 existing chat/identity
+PostgreSQL contract tests passed. No secret file or full environment export was
+created. Recreate an isolated branch if this one has expired. Authenticated
+installation pairing and runtime store activation remain pending.
