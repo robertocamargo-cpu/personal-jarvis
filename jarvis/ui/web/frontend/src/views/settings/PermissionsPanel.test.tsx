@@ -30,7 +30,7 @@ vi.mock("@/hooks/usePermissions", () => ({
   }),
 }));
 
-import { PermissionRows } from "./PermissionsPanel";
+import { PermissionsPanel, PermissionRows } from "./PermissionsPanel";
 
 function snapshotWith(row: Partial<PermissionItem>): PermissionSnapshot {
   return {
@@ -90,4 +90,12 @@ describe("PermissionRows", () => {
 
     expect(screen.queryByRole("button", { name: "permissions.ask_again" })).toBeNull();
   });
+});
+
+it("shows browser capture separately from collapsed native permissions in Settings", () => {
+  mockSnapshot = snapshotWith({ id: "microphone", status: "unavailable" });
+  const { container } = render(<PermissionsPanel />);
+  expect(screen.getByRole("button", { name: "onboarding.permissions.browser.request" })).toBeDefined();
+  expect(container.querySelector("details")?.open).toBe(false);
+  expect(screen.queryByRole("button", { name: "onboarding.permissions.continue" })).toBeNull();
 });

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/agentic/controls";
 import { useT } from "@/i18n";
 import type { StepProps } from "../OnboardingFlow";
@@ -7,7 +7,7 @@ import { StepFooter } from "../primitives";
 type Status = "idle" | "checking" | "granted" | "denied" | "unavailable" | "no_device" | "failed";
 
 /** Probe the current browser's microphone, never the server's native TCC identity. */
-export function BrowserPermissionsStep({ goNext, goBack, skip, setSummary, setGap }: StepProps) {
+export function BrowserMicrophoneAccess({ onReady }: { onReady?: (ready: boolean) => void }) {
   const t = useT();
   const supported = window.isSecureContext && typeof navigator.mediaDevices?.getUserMedia === "function";
   const [status, setStatus] = useState<Status>(supported ? "idle" : "unavailable");
@@ -20,10 +20,7 @@ export function BrowserPermissionsStep({ goNext, goBack, skip, setSummary, setGa
     return () => { mounted.current = false; };
   }, []);
 
-  useEffect(() => {
-    setSummary(ready ? t("onboarding.permissions.browser.granted") : null);
-    setGap(ready ? null : t("onboarding.permissions.browser.gap"));
-  }, [ready, setSummary, setGap, t]);
+  useEffect(() => { onReady?.(ready); }, [ready, onReady]);
 
   const request = async () => {
     if (pending.current || !supported) return;
@@ -60,6 +57,21 @@ export function BrowserPermissionsStep({ goNext, goBack, skip, setSummary, setGa
       <p className="text-[13px] leading-relaxed text-muted-foreground">
         {t("onboarding.permissions.browser.privacy_note")}
       </p>
+
+    </div>
+  );
+}
+
+export function BrowserPermissionsStep({ goNext, goBack, skip, setSummary, setGap }: StepProps) {
+  const t = useT();
+  const [ready, setReady] = useState(false);
+  const onReady = useCallback((value: boolean) => setReady(value), []);
+  useEffect(() => {
+    setSummary(ready ? t("onboarding.permissions.browser.granted") : null);
+    setGap(ready ? null : t("onboarding.permissions.browser.gap"));
+  }, [ready, setSummary, setGap, t]);
+  return <div className="space-y-6">
+    <BrowserMicrophoneAccess onReady={onReady} />
       <StepFooter onBack={goBack}
         primary={{ label: t("onboarding.permissions.continue"), onClick: goNext, disabled: !ready }}
         secondary={ready ? null : {
@@ -68,6 +80,5 @@ export function BrowserPermissionsStep({ goNext, goBack, skip, setSummary, setGa
           testId: "onboarding-permissions-skip",
         }}
       />
-    </div>
-  );
+  </div>;
 }

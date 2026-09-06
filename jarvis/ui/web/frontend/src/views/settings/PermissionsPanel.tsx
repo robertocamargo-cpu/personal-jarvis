@@ -1,3 +1,5 @@
+import { BrowserMicrophoneAccess } from "@/components/onboarding/steps/BrowserPermissionsStep";
+import { hasEmbeddedDesktopBridge } from "@/components/voice/BrowserRealtimeControl";
 import {
   Accessibility,
   CheckCircle2,
@@ -258,11 +260,17 @@ function PermissionRow({
 
 export function PermissionsPanel() {
   const t = useT();
+  const browser = !hasEmbeddedDesktopBridge();
   return (
     <div className="mt-8 space-y-4">
       <h3 className="font-display text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {t("permissions.group_title")}
       </h3>
+      {browser && <SettingsBlock icon={Mic} title={t("onboarding.permissions.browser.title")}>
+        <BrowserMicrophoneAccess />
+      </SettingsBlock>}
+      <details open={!browser}>
+        {browser && <summary className="cursor-pointer text-sm text-muted-foreground">{t("permissions.title")}</summary>}
       <SettingsBlock
         icon={ShieldCheck}
         title={t("permissions.title")}
@@ -270,6 +278,7 @@ export function PermissionsPanel() {
       >
         <PermissionRows />
       </SettingsBlock>
+      </details>
     </div>
   );
 }

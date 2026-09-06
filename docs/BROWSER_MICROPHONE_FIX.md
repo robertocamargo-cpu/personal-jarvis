@@ -53,3 +53,14 @@ with Node 22 using `npm run build` in the frontend directory.
 - The renewed Terms of Use confirmation was supplied by the user before proceeding.
   No native permission setting was modified. Full voice conversation and wake-word
   functionality are separate from this microphone permission check.
+
+## Settings follow-up
+
+Tier: T2 — browser Settings surface; native permission APIs unchanged.
+The same capture component now appears in Settings after onboarding is complete.
+In a browser, native macOS permissions are retained in a separate collapsed section;
+embedded desktop clients retain the expanded native section. The browser check does
+not set native readiness or enable wake-word listening. Nine focused Settings and
+capture tests passed, including a regression test for the separate sections.
+TypeScript, production build, and worklet guard passed. Live Chrome Settings showed
+`Browser microphone allowed` after pressing Allow microphone on the rebuilt page.
