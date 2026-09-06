@@ -16,9 +16,22 @@ for (const cookie of ["", "__Secure-neon-auth.session_token=forged; __Secure-neo
 const account = await fetch(new URL("/conta", base), { redirect: "manual" });
 assert.equal(account.status, 307);
 assert.equal(new URL(account.headers.get("location"), base).pathname, "/entrar");
+const chat = await fetch(new URL("/chat", base), { redirect: "manual" });
+assert.equal(chat.status, 307);
+assert.equal(new URL(chat.headers.get("location"), base).pathname, "/entrar");
+for (const method of ["GET", "POST"]) {
+  const response = await fetch(new URL("/api/chat?owner_id=forged", base), {
+    method, headers: { origin: new URL(base).origin, "content-type": "application/json" },
+    ...(method === "POST" ? { body: "{}" } : {}),
+  });
+  assert.equal(response.status, 401, "Chat requires a verified session");
+  assert.match(response.headers.get("cache-control"), /no-store/);
+}
 for (const origin of [null, "https://evil.example"]) {
   const response = await fetch(new URL("/api/auth/sign-out", base), { method: "POST", headers: origin ? { origin } : {} });
   assert.equal(response.status, 403, "Cross-origin mutations are rejected");
+  const chatResponse = await fetch(new URL("/api/chat", base), { method: "POST", headers: origin ? { origin } : {} });
+  assert.equal(chatResponse.status, 403, "Cross-origin chat is rejected before paid work");
 }
 const session = await fetch(new URL("/api/auth/get-session", base));
 assert.equal(session.status, 200);

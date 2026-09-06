@@ -1,8 +1,10 @@
+import { chatConfiguration } from "../../lib/chat/policy.mjs";
+export const dynamic = "force-dynamic";
 export function GET() {
   return Response.json({
     service: "personal-jarvis-cloud",
-    stage: "account-foundation",
+    stage: "cloud-text-chat",
     commit: process.env.VERCEL_GIT_COMMIT_SHA || null,
-    capabilities: { remote_chat: false, remote_voice: false, cloud_database: false },
+    capabilities: { remote_chat: Boolean(chatConfiguration()), remote_voice: false, cloud_database: Boolean(chatConfiguration()) },
   }, { headers: { "Cache-Control": "no-store" } });
 }

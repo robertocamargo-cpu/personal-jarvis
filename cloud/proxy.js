@@ -7,4 +7,4 @@ export default async function proxy(request) {
   return auth.middleware({ loginUrl: "/entrar" })(request);
 }
 
-export const config = { matcher: ["/conta/:path*"] };
+export const config = { matcher: ["/conta/:path*", "/chat/:path*"] };

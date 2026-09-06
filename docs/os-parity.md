@@ -353,6 +353,24 @@ shortcuts it never created. Covered by
 
 ## Maintenance
 
+### Cloud text chat — 2026-09-06
+
+T3: an optional Node HTTP transport with a single `chatConfiguration` capability
+probe and verified account authorization. No desktop import, native audio or
+OS API is required. Missing configuration denies chat honestly; it does not
+change the behavior of desktop providers or trigger paid fallback calls.
+
+| Cell | Implementation | Evidence |
+| --- | --- | --- |
+| macOS | Node 22, standard HTTP streams, PostgreSQL | Build, policy tests, real Neon persistence and one-key Gemini stream passed |
+| Linux / Vercel | Same Node source and session boundary | Deployment and authenticated acceptance tracked in `INSTALLATION_PROGRESS.md` |
+| Windows | Same portable Node source | Contract provided; not executed on a Windows host |
+| Python-only/headless | No cloud runtime dependency | Contract skips without Node; desktop boot path unchanged |
+
+`tests/contract/test_cloud_chat.py` covers the transport policy family.
+`cloud/tests/chat-postgres.test.mjs` exercises the real persistence family.
+See `CLOUD_CHAT.md` for quotas, ownership, failure behavior and deployment.
+
 ### Cloud account surface — 2026-09-06
 
 T3: `cloud/` adds a separate Next.js/Neon authentication surface. Capability

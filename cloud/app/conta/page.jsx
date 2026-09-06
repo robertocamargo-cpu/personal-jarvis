@@ -16,8 +16,8 @@ export default async function Account() {
     <p className="eyebrow">Conta conectada</p><h1>Olá, {account.name || "bem-vindo"}.</h1>
     <p className="intro">Você entrou como {account.email}.</p>
     <div className="grid">
-      <article><span className="badge">Próxima etapa</span><h2>Seu histórico</h2><p>Vamos vincular a instalação do seu Mac a esta conta. Seu histórico local continua preservado.</p></article>
-      <article><span className="badge">Em preparação</span><h2>Conversar pelo celular</h2><p>A conversa por texto, a voz e as aprovações remotas serão disponibilizadas após a conexão do assistente.</p></article>
+      <article><span className="badge">Conversa por texto</span><h2>Jarvis na nuvem</h2><p>Converse em português, pelo computador ou celular, sem depender do Mac.</p><p><a className="button" href="/chat">Abrir conversa</a></p></article>
+      <article><span className="badge">Sua conta</span><h2>Histórico da nuvem</h2><p>As novas conversas ficam nesta conta. A integração com o Mac, voz e aprovações remotas serão adicionadas em próximas etapas.</p></article>
     </div><SignOut />
   </>;
 }

@@ -6,19 +6,26 @@ not block automated checks.
 
 ## Latest follow-up
 
+- Cloud text chat is implemented at `/chat`, using verified Google account
+  ownership, streamed Brazilian Portuguese replies and separate PostgreSQL
+  history. The configured model is Gemini 2.5 Flash-Lite. The real Neon branch
+  test, Node 22 build, one-key provider call and 526 contract/core tests passed.
+  Publication and authenticated acceptance are being checked separately; see
+  `CLOUD_CHAT.md`. Mac pairing, central desktop storage migration and the Local
+  Bridge remain deferred by the user.
+
 - Mobile installation foundation: `/instalar`, standalone Web App Manifest,
   generated 180/192/512 icons, Apple home-screen metadata and browser-supported
-  installation prompt. No personal data caching, push or remote conversation
-  activation. Physical phone acceptance remains pending; see
+  installation prompt. No personal data caching or push notifications.
+  Physical phone acceptance remains pending; see
   `CLOUD_MOBILE_INSTALL.md`.
 
 - GitHub and Vercel are integrated; the public address is
   `https://jarvis-bob.vercel.app`. Neon `jarvis-db` is provisioned on the Free
   plan in Sao Paulo, linked to production, with client TLS verified.
 - The cloud account foundation now has a Portuguese sign-in surface, managed
-  server-side sessions and a protected account boundary. Login remains gated
-  until Neon accepts the callback domain; opening its settings via Vercel
-  currently requires the user's 2FA. See `CLOUD_AUTH.md` for evidence and limits.
+  server-side sessions and a protected account boundary. Google sign-in and
+  authenticated account-page reload are verified. See `CLOUD_AUTH.md`.
 
 - Optional PostgreSQL conversation store and atomic snapshot import are now
   implemented. Real database tests verify parity with SQLite, owner isolation,
@@ -37,7 +44,7 @@ not block automated checks.
   and the remaining storage domains are still pending; see
   `POSTGRES_FOUNDATION.md`.
 
-## Verified
+## Historical development verification
 
 - Headless dev instance at `http://127.0.0.1:18765`: health OK after restart.
 - Gemini configured; reply and recognition pins remain Portuguese. Gemini Live
@@ -57,16 +64,16 @@ Earlier changes were committed locally and subsequently pushed during the
 authorized GitHub/Vercel integration. The cloud address is deployed. No release
 or completed remote chat/voice channel connection is claimed.
 
-## Mobile conversation remains unconfigured
+## Local transport and deferred mobile voice
 
 `127.0.0.1` is loopback, so the Mac URL is not a mobile access URL. The current
 headless server stays bound to loopback. Existing Host/Origin/cookie/Bearer
 guards are in `ui/web/surface_security.py`; they need deliberate remote
 deployment configuration, not removal to make an IP work.
 
-Project mobile access requires an authenticated HTTPS origin and a route to the
-backend/WebSocket voice transport, followed by a real phone test. The roadmap
-places this after storage and cloud foundations. A Telegram adapter is not
+Cloud text chat uses its own authenticated HTTPS endpoint. Mobile voice still
+requires a backend/WebSocket voice transport and a real phone test.
+A Telegram adapter is not
 proof of a connected Telegram account or cross-channel approval delivery.
 
 Codex Remote is a separate control plane for development approvals. Its device
