@@ -20,6 +20,14 @@ const keysFor = (loc: Record<string, unknown>): Set<string> =>
   new Set(flatten((loc.onboarding ?? {}) as Record<string, unknown>));
 
 describe("onboarding i18n parity", () => {
+  it("resolves browser permission copy at the paths used by the UI", () => {
+    for (const locale of [en, de, es]) {
+      const keys = keysFor(locale);
+      for (const key of ["title", "hint", "description", "idle", "checking", "granted", "denied", "unavailable", "no_device", "failed", "request", "gap", "privacy_note"]) {
+        expect(keys.has(`permissions.browser.${key}`)).toBe(true);
+      }
+    }
+  });
   it("en defines a non-trivial onboarding key set", () => {
     expect(keysFor(en as Record<string, unknown>).size).toBeGreaterThan(20);
   });

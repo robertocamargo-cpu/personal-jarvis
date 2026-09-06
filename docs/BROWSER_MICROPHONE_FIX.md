@@ -43,7 +43,13 @@ with Node 22 using `npm run build` in the frontend directory.
   Vite reports existing large chunk and mixed dynamic/static import warnings.
 - Local HTTP check: served index exactly matches the rebuilt index, and the served
   entry bundle contains the new browser permission interface.
-- Chrome loaded the rebuilt application. Live microphone verification is pending:
-  reloading returned onboarding to Terms of Use, and automatic approval review
-  rejected resubmission without a renewed action-time confirmation. No permission
-  was forged and no native permission setting was modified.
+- Chrome displayed the corrected browser-specific heading and Allow microphone button.
+  The real origin-scoped Chrome prompt listed the MacBook Air built-in microphone.
+  The onboarding register subsequently displayed Browser microphone allowed, which
+  is set only after obtaining a live audio track. The capture probe succeeded.
+- Live inspection caught misplaced translation keys; they were moved to the exact
+  paths consumed by the UI. A new path regression test and all four locale parity
+  tests passed. The final TypeScript/build/worklet checks passed again.
+- The renewed Terms of Use confirmation was supplied by the user before proceeding.
+  No native permission setting was modified. Full voice conversation and wake-word
+  functionality are separate from this microphone permission check.

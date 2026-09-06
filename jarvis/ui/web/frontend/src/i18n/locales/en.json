@@ -2900,21 +2900,6 @@
         "hint": "Paste an API key from a provider you already use, or run fully local. Voice providers can be added later under API Keys."
       },
       "permissions": {
-      "browser": {
-        "title": "Allow microphone access in this browser",
-        "hint": "This page uses your browser microphone permission. Allow access, then continue.",
-        "description": "Microphone access here enables browser voice input. Wake-word listening and desktop control still require the installed app and its own permissions.",
-        "idle": "Click Allow microphone to check access.",
-        "checking": "Waiting for the browser or system permission prompt…",
-        "granted": "Browser microphone allowed",
-        "denied": "Access was denied. Allow the microphone in this site’s browser settings and allow your browser under System Settings → Privacy & Security → Microphone, then try again.",
-        "unavailable": "Microphone access requires HTTPS or localhost and a browser that supports audio capture.",
-        "no_device": "No working microphone was found. Connect or enable a microphone, then try again.",
-        "failed": "The microphone could not be opened. Check your input device and other apps using it, then try again.",
-        "request": "Allow microphone",
-        "gap": "Browser microphone access has not been verified. Allow it in this browser before using browser voice.",
-        "privacy_note": "This check briefly opens the microphone and immediately releases it. It does not record or send audio. Browser permission does not grant native app permissions."
-      },
         "label": "Permissions",
         "title": "Allow access on this Mac",
         "hint": "macOS asks for each capability separately. Grant them, then come back — the list updates itself."
@@ -3007,6 +2992,21 @@
       "gap_custom": "You picked providers yourself — voice in, voice out and the agents may still need their own keys. Check under API Keys."
     },
     "permissions": {
+      "browser": {
+        "title": "Allow microphone access in this browser",
+        "hint": "This page uses your browser microphone permission. Allow access, then continue.",
+        "description": "Microphone access here enables browser voice input. Wake-word listening and desktop control still require the installed app and its own permissions.",
+        "idle": "Click Allow microphone to check access.",
+        "checking": "Waiting for the browser or system permission prompt…",
+        "granted": "Browser microphone allowed",
+        "denied": "Access was denied. Allow the microphone in this site’s browser settings and allow your browser under System Settings → Privacy & Security → Microphone, then try again.",
+        "unavailable": "Microphone access requires HTTPS or localhost and a browser that supports audio capture.",
+        "no_device": "No working microphone was found. Connect or enable a microphone, then try again.",
+        "failed": "The microphone could not be opened. Check your input device and other apps using it, then try again.",
+        "request": "Allow microphone",
+        "gap": "Browser microphone access has not been verified. Allow it in this browser before using browser voice.",
+        "privacy_note": "This check briefly opens the microphone and immediately releases it. It does not record or send audio. Browser permission does not grant native app permissions."
+      },
       "privacy_note": "These prompts come from macOS. The installer cannot silently approve them, and {name} never bypasses System Settings. The Keychain prompt at app start only means your API keys are being saved encrypted in the macOS Keychain — they never leave your Mac.",
       "continue": "Continue",
       "text_only": "Continue with text only",
