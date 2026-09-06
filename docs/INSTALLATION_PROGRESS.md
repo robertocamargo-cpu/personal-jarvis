@@ -6,6 +6,14 @@ not block automated checks.
 
 ## Latest follow-up
 
+- GitHub and Vercel are integrated; the public address is
+  `https://jarvis-bob.vercel.app`. Neon `jarvis-db` is provisioned on the Free
+  plan in Sao Paulo, linked to production, with client TLS verified.
+- The cloud account foundation now has a Portuguese sign-in surface, managed
+  server-side sessions and a protected account boundary. Login remains gated
+  until Neon accepts the callback domain; opening its settings via Vercel
+  currently requires the user's 2FA. See `CLOUD_AUTH.md` for evidence and limits.
+
 - Optional PostgreSQL conversation store and atomic snapshot import are now
   implemented. Real database tests verify parity with SQLite, owner isolation,
   concurrent event ordering, rollback and import conflict handling. Initial
@@ -39,10 +47,11 @@ not block automated checks.
 - Identity plus required guards: 535 tests passed. Browser voice/language plus
   guards after the locale fix: 565 passed. Preview/language tests: 19 passed.
 
-Changes were committed locally. No release, cloud deployment or new channel
-connection is claimed.
+Earlier changes were committed locally and subsequently pushed during the
+authorized GitHub/Vercel integration. The cloud address is deployed. No release
+or completed remote chat/voice channel connection is claimed.
 
-## Mobile access remains unconfigured
+## Mobile conversation remains unconfigured
 
 `127.0.0.1` is loopback, so the Mac URL is not a mobile access URL. The current
 headless server stays bound to loopback. Existing Host/Origin/cookie/Bearer
@@ -59,7 +68,7 @@ pairing has not been verified here and it does not publish the Jarvis UI.
 
 ## Next prerequisites
 
-Continue identity integration with explicit migration and API/frontend parity;
-then establish the app's authenticated cloud owner and designated Neon project.
+Complete trusted-domain configuration and authenticated cloud owner pairing.
+The designated Neon project is already provisioned.
 The storage inventory is prepared in `STORAGE_MIGRATION_INVENTORY.md`. Cloud
 CRUD, deployment, mobile pairing and human audio acceptance remain pending.

@@ -1,15 +1,17 @@
 # GitHub and Vercel foundation
 
 The user authorized GitHub/Vercel integration on 2026-09-06. `cloud/` is the
-deployment root. Its dependency-free Node 22 build publishes a Portuguese
-installation status page and a small public deployment manifest containing only
-the commit ID, build time and currently unavailable remote capabilities.
+deployment root. The initial static Node 22 status page was subsequently
+replaced by a Next.js application with a Portuguese account surface. Its public
+manifest contains only the commit ID and unavailable remote capabilities.
 
 This is a deployment foundation, not the complete Jarvis cloud runtime. The
 native server still depends on local audio, processes, filesystem state and
 in-process sessions. Publishing the full desktop composition as a stateless
 function would not establish those capabilities. The cloud page explicitly says
-that chat, voice, login and history migration remain to be completed.
+that chat, voice and history migration remain to be completed. The account
+foundation is implemented but login activation still needs callback setup;
+see `CLOUD_AUTH.md`.
 
 No local configuration, provider credential, conversation, database or desktop
 tool endpoint is deployed. Microphone/camera access is disabled on this status
@@ -17,7 +19,7 @@ page. The existing Mac UI and Gemini 2.5 Native Audio selection remain independe
 
 GitHub repository: `robertocamargo-cpu/personal-jarvis` (the user's fork, not
 `PersonalJarvis/PersonalJarvis`). Vercel team: `robertocamargo-cpu`. Use the
-`cloud` root directory, `npm run build`, output `dist`, framework Other.
+`cloud` root directory, `npm run build`, automatic output, framework Next.js.
 
 ## Verified deployment on 2026-09-06
 

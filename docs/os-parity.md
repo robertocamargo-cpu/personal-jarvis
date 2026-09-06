@@ -353,6 +353,26 @@ shortcuts it never created. Covered by
 
 ## Maintenance
 
+### Cloud account surface — 2026-09-06
+
+T3: `cloud/` adds a separate Next.js/Neon authentication surface. Capability
+probe: valid HTTPS Auth URL and a cookie secret of at least 32 characters;
+login is separately gated until the trusted callback is verified. No desktop
+package imports the cloud runtime. Missing Node or auth configuration does not
+change desktop installation or boot behavior.
+
+| Cell | Implementation | Evidence |
+| --- | --- | --- |
+| macOS | Node 22 cloud app; platform-neutral authorization policy | Production build, policy and real HTTP boundary checks passed |
+| Linux / Vercel | Same app and managed Auth SDK | Deployment checked separately; no native audio dependency |
+| Windows | Same Node app and Web Request policy | Not executed on a Windows host; contract uses a portable Node capability probe |
+| Python-only/headless installation | Cloud runtime remains optional and isolated | No new Python runtime import or dependency |
+
+`tests/contract/test_cloud_auth.py` runs the policy family when Node is present.
+Google callback configuration and authenticated end-to-end acceptance remain
+pending; this is not a completed single-account cloud migration. See
+`CLOUD_AUTH.md`.
+
 - Fixing a gap: remove its row (git history keeps the record).
 - Landing a new Windows-only implementation: add a row (required by
   CLAUDE.md §3) with impact, evidence, and off-Windows behavior.
