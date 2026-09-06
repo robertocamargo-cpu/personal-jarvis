@@ -2900,6 +2900,21 @@
         "hint": "Pega una clave API de un proveedor que ya uses, o trabaja totalmente en local. Los proveedores de voz se pueden añadir después en Claves API."
       },
       "permissions": {
+      "browser": {
+        "title": "Permitir el micrófono en este navegador",
+        "hint": "Esta página usa el permiso de micrófono de tu navegador. Permite el acceso y continúa.",
+        "description": "Este acceso permite la entrada de voz en el navegador. La palabra de activación y el control del escritorio siguen necesitando la aplicación instalada y sus propios permisos.",
+        "idle": "Pulsa Permitir micrófono para comprobar el acceso.",
+        "checking": "Esperando la solicitud de permiso del navegador o del sistema…",
+        "granted": "Micrófono del navegador permitido",
+        "denied": "Acceso denegado. Permite el micrófono en los ajustes de este sitio y permite tu navegador en Ajustes del Sistema → Privacidad y seguridad → Micrófono. Después vuelve a intentarlo.",
+        "unavailable": "El acceso al micrófono requiere HTTPS o localhost y un navegador compatible con captura de audio.",
+        "no_device": "No se encontró un micrófono operativo. Conecta o activa un micrófono y vuelve a intentarlo.",
+        "failed": "No se pudo abrir el micrófono. Revisa el dispositivo de entrada y las otras aplicaciones que lo usan y vuelve a intentarlo.",
+        "request": "Permitir micrófono",
+        "gap": "No se ha verificado el acceso al micrófono del navegador. Permítelo antes de usar la voz en el navegador.",
+        "privacy_note": "Esta comprobación abre brevemente el micrófono y lo libera inmediatamente. No graba ni envía audio. El permiso del navegador no concede permisos a la aplicación nativa."
+      },
         "label": "Permisos",
         "title": "Permitir el acceso en este Mac",
         "hint": "macOS pide cada capacidad por separado. Concédelas y vuelve — la lista se actualiza sola."

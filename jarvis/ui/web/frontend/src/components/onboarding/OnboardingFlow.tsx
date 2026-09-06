@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { hasEmbeddedDesktopBridge } from "@/components/voice/BrowserRealtimeControl";
 import { MascotGigi } from "@/components/MascotGigi";
 import { useT } from "@/i18n";
 import { cn } from "@/lib/utils";
@@ -155,8 +156,11 @@ export function OnboardingFlow({
     gaps,
   };
 
-  const title = t(`onboarding.steps.${stepKey}.title`);
-  const hint = t(`onboarding.steps.${stepKey}.hint`);
+  const copyPrefix = stepKey === "permissions" && !hasEmbeddedDesktopBridge()
+    ? "onboarding.permissions.browser"
+    : `onboarding.steps.${stepKey}`;
+  const title = t(`${copyPrefix}.title`);
+  const hint = t(`${copyPrefix}.hint`);
 
   return (
     <div

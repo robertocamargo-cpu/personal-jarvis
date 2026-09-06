@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import type { PermissionId, PermissionSnapshot } from "@/hooks/usePermissions";
 import { useT } from "@/i18n";
+import { hasEmbeddedDesktopBridge } from "@/components/voice/BrowserRealtimeControl";
+import { BrowserPermissionsStep } from "./BrowserPermissionsStep";
 import { PermissionRows } from "@/views/settings/PermissionsPanel";
 import type { StepProps } from "../OnboardingFlow";
 import { StepFooter } from "../primitives";
@@ -46,7 +48,11 @@ export function permissionSnapshotReady(snapshot: PermissionSnapshot | null): bo
  * `visibleSteps`). The rows are the Settings panel's own, so what the user
  * grants here is exactly what they will see there.
  */
-export function PermissionsStep({ goNext, goBack, skip, setSummary, setGap }: StepProps) {
+export function PermissionsStep(props: StepProps) {
+  return hasEmbeddedDesktopBridge() ? <NativePermissionsStep {...props} /> : <BrowserPermissionsStep {...props} />;
+}
+
+function NativePermissionsStep({ goNext, goBack, skip, setSummary, setGap }: StepProps) {
   const t = useT();
   const [allReady, setAllReady] = useState(false);
   const onSnapshot = useCallback((snapshot: PermissionSnapshot | null) => {

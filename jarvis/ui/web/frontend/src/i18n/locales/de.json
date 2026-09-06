@@ -2900,6 +2900,21 @@
         "hint": "Füge einen API-Schlüssel eines Anbieters ein, den du schon nutzt — oder arbeite komplett lokal. Sprachanbieter kannst du später unter API-Schlüssel ergänzen."
       },
       "permissions": {
+      "browser": {
+        "title": "Mikrofonzugriff in diesem Browser erlauben",
+        "hint": "Diese Seite verwendet die Mikrofonberechtigung deines Browsers. Erlaube den Zugriff und fahre dann fort.",
+        "description": "Der Mikrofonzugriff hier ermöglicht Spracheingabe im Browser. Aktivierungswort und Desktop-Steuerung benötigen weiterhin die installierte App und deren eigene Berechtigungen.",
+        "idle": "Klicke auf Mikrofon erlauben, um den Zugriff zu prüfen.",
+        "checking": "Warte auf die Berechtigungsabfrage des Browsers oder Systems…",
+        "granted": "Browser-Mikrofon erlaubt",
+        "denied": "Zugriff verweigert. Erlaube das Mikrofon in den Website-Einstellungen und deinen Browser unter Systemeinstellungen → Datenschutz & Sicherheit → Mikrofon. Versuche es dann erneut.",
+        "unavailable": "Mikrofonzugriff erfordert HTTPS oder localhost und einen Browser mit Audioaufnahme-Unterstützung.",
+        "no_device": "Kein funktionierendes Mikrofon gefunden. Verbinde oder aktiviere ein Mikrofon und versuche es erneut.",
+        "failed": "Das Mikrofon konnte nicht geöffnet werden. Prüfe das Eingabegerät und andere Apps, die es verwenden, und versuche es erneut.",
+        "request": "Mikrofon erlauben",
+        "gap": "Der Mikrofonzugriff im Browser wurde noch nicht geprüft. Erlaube ihn vor der Spracheingabe im Browser.",
+        "privacy_note": "Diese Prüfung öffnet das Mikrofon kurz und gibt es sofort wieder frei. Es wird kein Audio aufgezeichnet oder gesendet. Die Browserberechtigung erteilt keine Berechtigungen für die native App."
+      },
         "label": "Berechtigungen",
         "title": "Zugriff auf diesem Mac erlauben",
         "hint": "macOS fragt jede Fähigkeit einzeln ab. Erteile sie und komm zurück — die Liste aktualisiert sich selbst."
