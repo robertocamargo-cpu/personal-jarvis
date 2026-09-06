@@ -1,5 +1,27 @@
 # Assistant identity foundation
 
+## Runtime integration follow-up
+
+2026-09-06 (T2, existing identity surface): `core/identity_runtime.py` now offers
+an explicit, idempotent local migration. The existing assistant-name resolver
+and read-only settings API consume the persisted record when present. Reading
+an unmigrated installation creates no files and preserves legacy wake-derived
+names. Invalid storage logs a warning and retains the legacy name without
+overwriting data. Database reads use SQLite read-only mode.
+
+The dev installation was explicitly migrated to Jarvis, retaining its exact
+wake preference and leaving `jarvis.toml` untouched. After restart,
+`/api/settings/assistant-name` returned Jarvis and the browser displayed Jarvis.
+Backend migration/name/guard tests: 558 passed. Existing frontend cache/seed
+tests: 13 passed. Isolated boot window: 315 ms against an 8,000 ms budget;
+native audio startup was skipped because its input/permission was unavailable.
+Windows/Linux runtime remains unverified; the implementation uses the same
+Python/SQLite path on all three OSes. No public rename form or cloud owner model
+was introduced. `local-installation` identifies only this single-owner local
+installation and must never be used as a shared cloud tenant.
+
+The sections below describe the preceding foundation-only checkpoint.
+
 2026-09-06 — T3: new owner-scoped repository contract. This implements the
 preparatory domain/storage portion of milestone 2, not a runtime rename.
 

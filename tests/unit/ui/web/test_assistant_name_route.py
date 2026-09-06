@@ -34,3 +34,16 @@ async def test_resolves_name_from_wake_phrase_when_config_present() -> None:
     payload = await get_assistant_name(_request_with_config(cfg))  # type: ignore[arg-type]
     assert payload["resolved"] == "Nova"
     assert payload["default"] == "Assistant"
+
+
+async def test_explicit_identity_migration_reaches_existing_name_api(tmp_path):
+    from jarvis.core.identity_runtime import migrate_local_identity
+
+    cfg = SimpleNamespace(
+        memory=SimpleNamespace(data_dir=str(tmp_path)),
+        trigger=SimpleNamespace(wake_word=SimpleNamespace(phrase="Hey Nova")),
+    )
+    migrate_local_identity(cfg)
+    payload = await get_assistant_name(_request_with_config(cfg))
+    assert payload["resolved"] == "Jarvis"
+    assert cfg.trigger.wake_word.phrase == "Hey Nova"

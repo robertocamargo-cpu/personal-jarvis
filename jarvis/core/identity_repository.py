@@ -16,8 +16,10 @@ class SQLiteIdentityRepository:
     additive table is namespaced/versioned so existing application tables survive.
     """
 
-    def __init__(self, path: Path) -> None:
+    def __init__(self, path: Path, *, initialize: bool = True) -> None:
         self.path = path
+        if not initialize:
+            return
         with closing(sqlite3.connect(self.path)) as connection, connection:
             connection.execute(
                 "CREATE TABLE IF NOT EXISTS assistant_identity_v1 "
@@ -25,7 +27,8 @@ class SQLiteIdentityRepository:
             )
 
     def load(self, user_id: str) -> dict[str, Any] | None:
-        with closing(sqlite3.connect(self.path)) as connection, connection:
+        uri = self.path.resolve().as_uri() + "?mode=ro"
+        with closing(sqlite3.connect(uri, uri=True)) as connection, connection:
             row = connection.execute(
                 "SELECT payload FROM assistant_identity_v1 WHERE user_id = ?",
                 (user_id,),

@@ -1,5 +1,15 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: local identity integration (T2)
+
+Explicit migration and the existing name resolver/API now consume the local
+identity repository. macOS was verified through the live API and browser;
+Windows/Linux use identical Python/SQLite code but were not executed. No native
+capability or frontend schema changed. 558 backend and 13 frontend tests passed;
+isolated boot completed in 315 ms. See `IDENTITY_FOUNDATION.md` for migration and
+single-owner scope. The realtime language-failure and public-fact uncertainty
+phrases also now include Portuguese; their absence previously selected English.
+
 ## 2026-09-06: Brazilian Portuguese browser voice follow-up (T2)
 
 Browser pipeline fallback and realtime voice previews now preserve `pt-BR`.

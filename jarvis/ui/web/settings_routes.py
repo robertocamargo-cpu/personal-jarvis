@@ -1969,8 +1969,10 @@ async def put_keybind(body: KeybindBody, request: Request) -> dict[str, object]:
 
 @router.get("/assistant-name")
 async def get_assistant_name(request: Request) -> dict[str, object]:
-    """The assistant's resolved name. Read-only: the name derives from the wake
-    phrase (set via PUT /api/settings/wake-word), there is no separate control."""
+    """Read the migrated identity, or the legacy wake-derived name.
+
+    This endpoint remains read-only; no public rename control is introduced.
+    """
     from jarvis.brain.assistant_name import DEFAULT_ASSISTANT_NAME, resolve_assistant_name
 
     cfg = _config(request)

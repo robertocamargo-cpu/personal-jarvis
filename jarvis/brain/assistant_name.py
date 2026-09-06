@@ -1,7 +1,8 @@
 """Resolve the assistant's own name (how it refers to itself).
 
-The name is a pure function of the wake phrase — there is no separate name
-setting. Resolution order (first non-empty wins):
+An explicitly migrated local identity takes precedence. Unmigrated installs
+retain the original wake-derived behavior below; reading never migrates them.
+Legacy resolution order (first non-empty wins):
   1. The wake phrase with its trigger prefix stripped — "Hey Jarvis" -> "Jarvis",
      "Micron" -> "Micron", "Hey Athena" -> "Athena", "Hey Computer" -> "Computer".
   2. ``DEFAULT_ASSISTANT_NAME`` — the neutral shipped fallback when no wake phrase
@@ -48,6 +49,12 @@ def agent_brand(config: Any) -> str:
 
 def resolve_assistant_name(config: Any) -> str:
     """Return the assistant's display name from ``config`` (see module docstring)."""
+    from jarvis.core.identity_runtime import migrated_identity
+
+    identity = migrated_identity(config)
+    if identity is not None:
+        return identity.display_name
+
     # 1. Derive from the wake phrase (prefix stripped, title-cased).
     trigger = getattr(config, "trigger", None)
     wake_word = getattr(trigger, "wake_word", None) if trigger is not None else None
