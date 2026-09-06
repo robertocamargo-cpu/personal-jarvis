@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101714">
+  <title>Jarvis — acesso remoto em preparação</title>
+  <style>
+    :root{color-scheme:light dark;--bg:#f5f7f3;--card:#fff;--text:#18271f;--muted:#58675e;--line:#dce5dc;--accent:#236747}
+    @media(prefers-color-scheme:dark){:root{--bg:#101714;--card:#19231d;--text:#edf5ed;--muted:#adc0b0;--line:#334639;--accent:#91dbaf}}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:17px/1.6 system-ui,sans-serif}main{max-width:880px;margin:0 auto;padding:64px 24px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line);padding-bottom:24px}.brand{font-size:28px;font-weight:750;letter-spacing:-1px}.locale{color:var(--muted);font-size:14px}.eyebrow{color:var(--accent);text-transform:uppercase;letter-spacing:2px;font-size:12px;font-weight:750;margin-top:56px}h1{font-size:clamp(32px,6vw,52px);line-height:1.12;letter-spacing:-1.5px;max-width:690px;margin:16px 0 24px}.intro{color:var(--muted);max-width:670px;font-size:19px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:36px 0}article{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}h2{font-size:19px;margin:0 0 10px}article p{color:var(--muted);margin:0}.badge{display:inline-block;font-size:12px;font-weight:650;color:var(--accent);border:1px solid var(--line);border-radius:30px;padding:4px 10px;margin-bottom:18px}a{color:var(--accent);text-underline-offset:4px}footer{margin-top:42px;border-top:1px solid var(--line);padding-top:20px;color:var(--muted);font-size:13px}#deployment{min-height:22px}@media(max-width:560px){main{padding-top:28px}.grid{grid-template-columns:1fr}.eyebrow{margin-top:36px}}
+  </style>
+  <script src="/status.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><span class="brand">Jarvis</span><span class="locale">Português · Brasil</span></header>
+    <p class="eyebrow">Instalação em andamento</p>
+    <h1>Seu assistente, a caminho de onde você estiver.</h1>
+    <p class="intro">Este é o endereço inicial do projeto na nuvem. O acesso às conversas e à voz pelo celular está em preparação.</p>
+    <div class="grid">
+      <article><span class="badge">Próxima conexão</span><h2>Conversas e memória</h2><p>A integração do banco de dados será validada antes de disponibilizar seu histórico neste endereço.</p></article>
+      <article><span class="badge">Em preparação</span><h2>Acesso pessoal</h2><p>O login e a conexão com o Jarvis do seu Mac ainda precisam ser concluídos para conversar por aqui.</p></article>
+    </div>
+    <p><a href="https://github.com/robertocamargo-cpu/personal-jarvis">Acompanhar o projeto no GitHub</a></p>
+    <footer><div id="deployment" role="status">Conferindo esta publicação…</div><p>Esta página não solicita microfone, não recebe conversas e não executa ações no computador.</p></footer>
+  </main>
+</body>
+</html>
