@@ -4,6 +4,18 @@ Evidence date: 2026-09-06. User requested autonomous local continuation and
 Brazilian Portuguese conversation. Human audio acceptance is deferred and does
 not block automated checks.
 
+## Latest follow-up
+
+- User requested only a cheaper Live model change. The existing API saved
+  `gemini-2.5-flash-native-audio-preview-12-2025`; a subsequent runtime read
+  confirmed it active, voice selection unchanged, no restart required and no
+  microphone session active. No paid model test was run for this change.
+- Explicit identity migration now resolves Jarvis in the existing API and UI.
+- PostgreSQL identity adapter implemented and tested against an isolated real
+  PostgreSQL 15.19 instance. 541 combined tests passed. Neon cloud activation
+  and the remaining storage domains are still pending; see
+  `POSTGRES_FOUNDATION.md`.
+
 ## Verified
 
 - Headless dev instance at `http://127.0.0.1:18765`: health OK after restart.

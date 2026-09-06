@@ -253,6 +253,7 @@ Changelog = "https://github.com/PersonalJarvis/PersonalJarvis/blob/main/CHANGELO
 Discord = "https://discord.gg/x7USduHxbc"
 
 [project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.2,<4"]
 dev = [
     # Pull the runtime extras the test suite exercises. The local-voice + desktop
     # packages were base dependencies until the cloud-first split; tests still

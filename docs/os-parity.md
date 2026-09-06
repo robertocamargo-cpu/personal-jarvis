@@ -1,5 +1,14 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: optional PostgreSQL identity adapter (T2)
+
+The existing identity repository contract now has an optional Psycopg 3 adapter.
+macOS was tested against real PostgreSQL 15.19 (541 combined contract/guard
+tests). Windows/Linux use the same adapter; those hosts and Neon networking
+remain unverified. Driver availability is explicit through the `postgres` extra;
+the adapter imports without it and opens nothing at startup. See
+`POSTGRES_FOUNDATION.md`. Runtime SQLite remains active.
+
 ## 2026-09-06: local identity integration (T2)
 
 Explicit migration and the existing name resolver/API now consume the local
