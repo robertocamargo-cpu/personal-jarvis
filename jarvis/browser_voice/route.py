@@ -48,8 +48,8 @@ _USAGE_FALLBACK_DISABLED_DETAIL = (
     "restore its subscription access."
 )
 
-# BCP-47 from the canonical per-turn resolver (de/en/es).
-_LANG_MAP = {"de": "de-DE", "en": "en-US", "es": "es-ES"}
+# BCP-47 from the canonical per-turn resolver.
+_LANG_MAP = {"de": "de-DE", "en": "en-US", "es": "es-ES", "pt": "pt-BR"}
 
 
 def _browser_voice_enabled(cfg: Any) -> bool:

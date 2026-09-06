@@ -40,8 +40,28 @@ def test_manager_pin_and_command_catalog_agree():
 
 
 def test_voice_consumers_keep_brazilian_locale():
+    from types import SimpleNamespace
+
+    from jarvis.browser_voice.route import _resolve_language
     from jarvis.realtime.session import _LANGUAGE_NAMES
     from jarvis.speech.pipeline import SpeechPipeline
+    from jarvis.ui.web.provider_routes import _REALTIME_PREVIEW_LANG_CODES
 
     assert _LANGUAGE_NAMES["pt"] == "Brazilian Portuguese"
     assert SpeechPipeline._bcp47("pt") == "pt-BR"
+    for pin in ("pt", "pt-BR"):
+        config = SimpleNamespace(brain=SimpleNamespace(reply_language=pin))
+        assert _resolve_language(config) == "pt-BR"
+    assert _REALTIME_PREVIEW_LANG_CODES["pt"] == "pt-BR"
+
+
+def test_browser_voice_error_does_not_switch_to_german():
+    from jarvis.brain.output_filter import scrub_for_voice
+    from jarvis.browser_voice.session import BrowserVoiceSession
+
+    session = BrowserVoiceSession.__new__(BrowserVoiceSession)
+    session.language_code = "pt-BR"
+    assert session._lang_short() == "pt"
+    result = scrub_for_voice("Traceback (most recent call last):", language=session._lang_short())
+    assert result.fallback_used
+    assert result.cleaned == "Ocorreu um erro."

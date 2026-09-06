@@ -38,6 +38,21 @@ async def _silent_sampler(*_args, **_kwargs) -> tuple[bytes, int]:
     return b"\x01\x02" * 240, 24_000
 
 
+def test_brazilian_portuguese_preview_keeps_text_and_locale(monkeypatch):
+    captured = []
+    monkeypatch.setattr(cfg_mod, "get_provider_secret", lambda _pid: "test-credential")
+
+    async def sampler(_key, *, model, voice, text, language):
+        captured.append((text, language))
+        return b"\x01\x02" * 240, 24_000
+
+    monkeypatch.setitem(provider_routes._REALTIME_PREVIEW_SAMPLERS, "gemini-live", sampler)
+    response = _preview(TestClient(_app()), "gemini-live", voice="Puck", language="pt-BR")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "audio/wav"
+    assert captured == [(provider_routes._TTS_PREVIEW_SAMPLES["pt"], "pt")]
+
+
 def test_every_preview_sampler_has_a_cataloged_realtime_provider() -> None:
     """A sampler may not exist without a catalog; offer-only providers may omit one."""
     from jarvis.brain.model_catalog import REALTIME_VOICES

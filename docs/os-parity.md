@@ -1,5 +1,16 @@
 # OS Feature Parity — macOS / Linux Gap Register
 
+## 2026-09-06: Brazilian Portuguese browser voice follow-up (T2)
+
+Browser pipeline fallback and realtime voice previews now preserve `pt-BR`.
+The browser output scrubber also retains Portuguese for its standard error
+phrase instead of silently selecting German. This touches the shared browser
+voice family on all operating systems; no native backend changes. Contract,
+browser voice and mandatory guard tests passed (565); preview endpoint and
+language contract tests passed (19). Actual speaker/microphone comprehension
+and Windows/Linux execution remain unverified. No microphone is opened by these
+tests, and no human confirmation is needed to run them.
+
 ## 2026-09-06: opt-in assistant identity foundation (T3)
 
 The new identity repository/service uses standard Python and SQLite on macOS,

@@ -3578,7 +3578,7 @@ _REALTIME_PREVIEW_TIMEOUT_S = 30.0
 # BCP-47 pronunciation pins for the sample languages. Gemini's prebuilt
 # voices are language-agnostic; an unpinned call auto-detects per word and
 # can code-switch mid-sentence, so the sample pins the language it speaks.
-_REALTIME_PREVIEW_LANG_CODES = {"de": "de-DE", "en": "en-US", "es": "es-ES"}
+_REALTIME_PREVIEW_LANG_CODES = {"de": "de-DE", "en": "en-US", "es": "es-ES", "pt": "pt-BR"}
 
 
 async def _gemini_live_voice_sample(
@@ -3743,7 +3743,7 @@ _REALTIME_PREVIEW_SAMPLERS: dict[str, Any] = {
 
 class RealtimeVoicePreviewBody(BaseModel):
     voice: str = Field(default="", max_length=200)
-    # The sample language to speak ("de" | "en" | "es"). Falls back to English.
+    # The sample language to speak (de/en/es/pt). Falls back to English.
     language: str = Field(default="en", max_length=16)
     # The realtime model to sample through where the sampler needs one
     # (openai-realtime); "" = the adapter default. Validated when non-empty.
@@ -4335,6 +4335,10 @@ _VOICE_PICKER_PROVIDER = "openrouter-tts"
 # Every supported runtime-output language has an entry (never a de/en-only
 # table — AP-21 / runtime-language doctrine).
 _TTS_PREVIEW_SAMPLES: dict[str, str] = {
+    "pt": (
+        "Olá! Sou seu assistente pessoal. "
+        "Esta é a minha voz quando converso com você e ajudo nas suas tarefas."
+    ),
     # The German sentence is deliberately NOT a literal translation of the
     # English one: Gemini's AI-Studio TTS safety filter deterministically
     # blocked the former mirrored sentence as PROHIBITED_CONTENT — 0/2 runs

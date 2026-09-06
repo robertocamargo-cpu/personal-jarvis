@@ -83,8 +83,9 @@ OPENER_BUDGET = 60
 FALLBACK_PHRASES: dict[str, str] = {
     "de": "Es trat ein Fehler auf.",  # i18n-allow: spoken German fallback phrase (runtime voice output)
     "en": "An error occurred.",
+    "pt": "Ocorreu um erro.",
     # Runtime-output-language doctrine: every spoken phrase table carries all
-    # supported locales (de/en/es) so a Spanish-pinned user never falls back to
+    # supported locales (de/en/es/pt) so a language-pinned user never falls back to
     # German. Used by the stacktrace, raw-dump, and post-scrub-residue guards.
     "es": "Se produjo un error.",
 }
