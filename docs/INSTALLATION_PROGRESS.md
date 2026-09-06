@@ -74,7 +74,25 @@ pairing has not been verified here and it does not publish the Jarvis UI.
 
 ## Next prerequisites
 
-Complete trusted-domain configuration and authenticated cloud owner pairing.
-The designated Neon project is already provisioned.
+Trusted-domain configuration and authenticated account-page acceptance are
+complete. Authenticated cloud owner pairing remains pending. The designated
+Neon project is already provisioned.
 The storage inventory is prepared in `STORAGE_MIGRATION_INVENTORY.md`. Cloud
 CRUD, deployment, mobile pairing and human audio acceptance remain pending.
+
+## Continuation check: local source unavailable
+
+The production deployment remains Ready at the Google sign-in commit. Public
+HTTP authentication and PWA checks passed again without paid provider calls.
+Earlier local health and history evidence above is historical: the development
+listener on port 18765 is no longer reachable, and its previously configured
+temporary runtime directory is absent in the current environment. The checkout's
+default data directory contains other state but does not establish the location
+of that chat history.
+
+Do not initialize an empty replacement and report it as recovered history.
+Locate the original runtime or a consistent backup before importing real
+conversations or assigning their cloud owner. Once recovered, put durable
+runtime state outside temporary storage, preserve a consistent SQLite backup,
+and reconcile snapshot counts and digests before any cutover. Cloud login
+availability does not establish local worker health or completed migration.

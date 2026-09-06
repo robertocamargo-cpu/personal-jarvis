@@ -34,8 +34,10 @@ Follow-up: the user completed Vercel 2FA and explicitly confirmed adding
 `https://jarvis-bob.vercel.app` to Neon's trusted domains. The console lists the
 saved domain and Google Shared keys. The direct Google initiation probe now
 returns HTTP 200 instead of `INVALID_CALLBACKURL`. Production login is enabled
-through `JARVIS_CLOUD_LOGIN_ENABLED=true`; actual account acceptance remains
-separate from successful OAuth initiation.
+through `JARVIS_CLOUD_LOGIN_ENABLED=true`. The user then completed Google
+sign-in: the protected account page displayed the authenticated account, and
+a reload retained the session. Account identifiers are deliberately omitted
+from this public document.
 
 - Production build completed with Node 22 on macOS, using Next's official WASM
   compiler after the optional native packages were omitted to reduce disk use.
@@ -44,14 +46,15 @@ separate from successful OAuth initiation.
   injection, account redirect, Origin denial and the disabled-login gate.
 - The existing four Python guard families passed: 525 tests.
 - Neon `get-session` returns HTTP 200 with a null anonymous session.
-- The Google initiation probe returns `INVALID_CALLBACKURL` for the requested
-  production callback. Login therefore remains disabled.
-- Opening the Neon dashboard through Vercel requires the user's Vercel 2FA.
-  The verification tab is retained for the user; no verification code is
-  requested in chat and no 2FA protection is bypassed.
+- The production HTTP contract was rerun with login enabled and passed:
+  anonymous and forged sessions are rejected, caller-supplied owner IDs do not
+  grant access, foreign mutation origins are denied, and Google initiation
+  succeeds.
+- The published PWA manifest, icon dimensions and installation instructions
+  passed the HTTP checks. Installation on a physical phone remains unverified.
 
-Authenticated end-to-end acceptance, logout and identity ownership mapping
-remain pending. No test account was created and no real history was imported.
+Logout and identity ownership mapping remain pending. No test account was
+created and no real history was imported.
 The next storage step must use the verified stable account ID and explicit local
 pairing, never a shared owner or the first visitor to the public URL.
 
