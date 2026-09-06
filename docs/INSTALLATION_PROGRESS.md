@@ -6,6 +6,12 @@ not block automated checks.
 
 ## Latest follow-up
 
+- Mobile installation foundation: `/instalar`, standalone Web App Manifest,
+  generated 180/192/512 icons, Apple home-screen metadata and browser-supported
+  installation prompt. No personal data caching, push or remote conversation
+  activation. Physical phone acceptance remains pending; see
+  `CLOUD_MOBILE_INSTALL.md`.
+
 - GitHub and Vercel are integrated; the public address is
   `https://jarvis-bob.vercel.app`. Neon `jarvis-db` is provisioned on the Free
   plan in Sao Paulo, linked to production, with client TLS verified.
