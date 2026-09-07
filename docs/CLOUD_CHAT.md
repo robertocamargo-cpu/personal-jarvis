@@ -28,6 +28,21 @@ deleting history. Do not drop the tables as a rollback procedure.
 
 ## Behavior and limits
 
+`/consumo` is a read-only, authenticated usage view for the last 30 calendar
+days in America/Sao_Paulo. It shows recorded input/output tokens, estimated
+completed-turn cost, daily quota and completed/failed/pending counts. Its owner
+comes from the same verified session as chat; URL parameters never choose an
+account. Expired pending turns are reported as failed without mutating them.
+Provider failures may have unreported charges and are explicitly excluded from
+the estimate. Local voice, other applications, tax and hosting are outside the
+report. The view performs no provider calls and needs no schema migration.
+
+T2: this extends the existing cloud surface only. macOS and Linux/Vercel use
+the same Node/PostgreSQL path; Windows uses that portable path but has not been
+executed here. Desktop transports and native backends are unchanged. The real
+PostgreSQL test covers totals, account isolation, empty accounts, lease states,
+and the exact local-midnight boundary of the 30-day window.
+
 - Brazilian Portuguese replies, streamed over same-origin authenticated HTTP.
 - At most 4,000 characters per message, eight previous completed turns and
   12,000 context characters; at most 1,024 output tokens.

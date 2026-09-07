@@ -25,6 +25,38 @@ export class ChatStore {
     const { rows } = await this.pool.query("SELECT attempts FROM cloud_chat_budget_v1 WHERE owner_id=$1 AND day=(now() AT TIME ZONE 'America/Sao_Paulo')::date", [owner]);
     return { used: rows[0]?.attempts || 0, limit: LIMITS.daily };
   }
+  async usage(owner) {
+    const { rows } = await this.pool.query(`
+      WITH calendar AS (
+        SELECT (now() AT TIME ZONE 'America/Sao_Paulo')::date AS today
+      ), days AS (
+        SELECT today-offset_days AS day FROM calendar CROSS JOIN generate_series(0,29) AS offset_days
+      ), daily AS (
+        SELECT (created_at AT TIME ZONE 'America/Sao_Paulo')::date AS day,
+          count(*) FILTER (WHERE status='complete')::int AS completed,
+          count(*) FILTER (WHERE status='failed' OR (status='pending' AND expires_at<now()))::int AS failed,
+          count(*) FILTER (WHERE status='pending' AND expires_at>=now())::int AS pending,
+          coalesce(sum(input_tokens) FILTER (WHERE status='complete'),0)::text AS input,
+          coalesce(sum(output_tokens) FILTER (WHERE status='complete'),0)::text AS output,
+          coalesce(sum(estimated_usd) FILTER (WHERE status='complete'),0)::text AS estimated_usd
+        FROM cloud_chat_turns_v1, calendar
+        WHERE owner_id=$1 AND created_at >= ((today-29)::timestamp AT TIME ZONE 'America/Sao_Paulo')
+          AND created_at < ((today+1)::timestamp AT TIME ZONE 'America/Sao_Paulo')
+        GROUP BY 1
+      )
+      SELECT to_char(days.day,'YYYY-MM-DD') AS day,
+        coalesce(completed,0) AS completed, coalesce(failed,0) AS failed,
+        coalesce(pending,0) AS pending, coalesce(input,'0') AS input,
+        coalesce(output,'0') AS output, coalesce(estimated_usd,'0') AS estimated_usd
+      FROM days LEFT JOIN daily USING(day) ORDER BY days.day DESC`, [owner]);
+    const totals = { completed: 0, failed: 0, pending: 0, input: 0, output: 0, estimated_usd: 0 };
+    const days = rows.map(row => {
+      const day = { day: row.day };
+      for (const key of Object.keys(totals)) { day[key] = Number(row[key]); totals[key] += day[key]; }
+      return day;
+    });
+    return { days, totals };
+  }
   async reserve(owner, message, model) {
     const client = await this.pool.connect();
     try {

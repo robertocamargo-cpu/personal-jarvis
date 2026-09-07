@@ -38,6 +38,24 @@ test("real PostgreSQL: ownership, restart persistence, concurrency, quota and id
     await pool.query("UPDATE cloud_chat_turns_v1 SET expires_at=now()-interval '1 second' WHERE owner_id='concurrent'");
     assert.equal((await store.history("concurrent", id)).turns[0].status, "failed");
     await store.reserve("concurrent", { ...message, requestId: randomUUID() }, MODEL);
+    const usage = await store.usage("owner-a");
+    assert.equal(usage.days.length, 30);
+    assert.deepEqual(usage.totals, { completed: 1, failed: 0, pending: 0, input: 10, output: 5, estimated_usd: 0.000003 });
+    assert.equal((await store.usage("owner-b")).totals.failed, 1);
+    assert.equal((await store.usage("owner-b")).totals.estimated_usd, 0);
+    const concurrentUsage = (await store.usage("concurrent")).totals;
+    assert.equal(concurrentUsage.failed, 1);
+    assert.equal(concurrentUsage.pending, 1);
+    assert.equal((await store.usage("unrelated")).totals.completed, 0);
+    // The oldest included day starts at local midnight, not UTC midnight.
+    await pool.query(`UPDATE cloud_chat_turns_v1 SET created_at=
+      (((now() AT TIME ZONE 'America/Sao_Paulo')::date-29)::timestamp AT TIME ZONE 'America/Sao_Paulo')
+      WHERE owner_id='owner-a'`);
+    const boundary = await store.usage("owner-a");
+    assert.equal(boundary.days.at(-1).completed, 1);
+    assert.equal(boundary.days[0].completed, 0);
+    await pool.query("UPDATE cloud_chat_turns_v1 SET created_at=created_at-interval '1 millisecond' WHERE owner_id='owner-a'");
+    assert.equal((await store.usage("owner-a")).totals.completed, 0);
   } finally {
     await pool.end(); await admin.query(`DROP SCHEMA ${schema} CASCADE`); await admin.end();
   }

@@ -19,6 +19,9 @@ assert.equal(new URL(account.headers.get("location"), base).pathname, "/entrar")
 const chat = await fetch(new URL("/chat", base), { redirect: "manual" });
 assert.equal(chat.status, 307);
 assert.equal(new URL(chat.headers.get("location"), base).pathname, "/entrar");
+const usage = await fetch(new URL("/consumo?owner_id=forged", base), { redirect: "manual" });
+assert.equal(usage.status, 307, "Usage is private and ignores submitted owner identity");
+assert.equal(new URL(usage.headers.get("location"), base).pathname, "/entrar");
 for (const method of ["GET", "POST"]) {
   const response = await fetch(new URL("/api/chat?owner_id=forged", base), {
     method, headers: { origin: new URL(base).origin, "content-type": "application/json" },

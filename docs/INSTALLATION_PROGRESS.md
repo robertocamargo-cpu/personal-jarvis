@@ -6,6 +6,12 @@ not block automated checks.
 
 ## Latest follow-up
 
+- The authenticated `/consumo` view now reports 30-day cloud text-chat token
+  usage and cost estimates, daily quota and incomplete attempts. Real Neon
+  tests passed for account isolation, aggregation and the local-date boundary.
+  The feature reads existing records without paid provider calls or schema
+  changes. Production and browser acceptance are checked separately.
+
 - Cloud text chat is implemented at `/chat`, using verified Google account
   ownership, streamed Brazilian Portuguese replies and separate PostgreSQL
   history. The configured model is Gemini 2.5 Flash-Lite. The real Neon branch

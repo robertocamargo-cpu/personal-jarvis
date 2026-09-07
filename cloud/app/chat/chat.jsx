@@ -118,6 +118,6 @@ export function Chat() {
       <textarea id="chat-message" maxLength={4000} rows={3} value={text} onChange={e => setText(e.target.value)} disabled={busy || loading} placeholder="Escreva para o Jarvis…" />
       <div className="chat-controls"><small className="muted">{text.length}/4.000 · Não envie senhas ou chaves de API.</small><button disabled={busy || loading || !text.trim()}>{busy ? "Respondendo…" : "Enviar"}</button></div>
     </form>
-    <p className="chat-note muted">Gemini 2.5 Flash-Lite · Respostas concisas · Contexto recente limitado para economizar. Estimativas em dólar, sem impostos; a cobrança oficial é a do Google.</p>
+    <p className="chat-note muted">Gemini 2.5 Flash-Lite · Respostas concisas · Contexto recente limitado para economizar. Estimativas em dólar, sem impostos; a cobrança oficial é a do Google. <a href="/consumo">Ver consumo e custos</a></p>
   </section>;
 }
