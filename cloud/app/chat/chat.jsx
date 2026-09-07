@@ -139,24 +139,34 @@ export function Chat() {
     <div className="chat-heading"><div><p className="eyebrow">Conversa Jarvis</p><h1>Olá, eu sou o Jarvis.</h1></div><a href="/conta">Minha conta</a></div>
     <p className="muted">Converse em português pelo computador ou celular. Alterne entre o motor na nuvem e o Jarvis no seu Mac.</p>
     
-    <div style={{ display: "flex", gap: "10px", margin: "14px 0 20px" }}>
-      <button
-        type="button"
-        className={target === "cloud" ? "button" : "button secondary"}
-        style={{ padding: "8px 16px", fontSize: "14px" }}
-        onClick={() => setTarget("cloud")}
-      >
-        ☁️ Jarvis Nuvem (Gemini)
-      </button>
-      <button
-        type="button"
-        className={target === "mac" ? "button" : "button secondary"}
-        style={{ padding: "8px 16px", fontSize: "14px" }}
-        onClick={() => setTarget("mac")}
-      >
-        🖥️ Jarvis Mac (Darwin)
-      </button>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", margin: "16px 0 8px" }}>
+      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+        <button
+          type="button"
+          className={target === "cloud" ? "button" : "button secondary"}
+          style={{ padding: "10px 18px", fontSize: "14px", borderRadius: "10px", border: target === "cloud" ? "2px solid var(--accent)" : "1px solid var(--line)" }}
+          onClick={() => setTarget("cloud")}
+        >
+          ☁️ Jarvis Nuvem (Gemini)
+        </button>
+        <button
+          type="button"
+          className={target === "mac" ? "button" : "button secondary"}
+          style={{ padding: "10px 18px", fontSize: "14px", borderRadius: "10px", border: target === "mac" ? "2px solid var(--accent)" : "1px solid var(--line)" }}
+          onClick={() => setTarget("mac")}
+        >
+          🖥️ Jarvis Mac (Darwin)
+        </button>
+      </div>
+      <a href="/aprovacoes" className="button secondary" style={{ fontSize: "13px", padding: "8px 14px", textDecoration: "none" }}>
+        🛡️ Aprovações Remotas
+      </a>
     </div>
+    <p className="muted" style={{ fontSize: "13px", margin: "0 0 16px" }}>
+      {target === "cloud" 
+        ? "Modo atual: Nuvem (Gemini). Respostas imediatas geradas pela nuvem." 
+        : "Modo atual: Jarvis Mac. Mensagens são enviadas para o seu computador e executadas localmente."}
+    </p>
 
     <div className="chat-controls"><button className="secondary" disabled={busy || loading} onClick={newChat}>Nova conversa</button>
       <label>Conversas<select aria-label="Conversas" value={current || ""} disabled={busy || loading} onChange={e => e.target.value ? open(e.target.value) : newChat()}>

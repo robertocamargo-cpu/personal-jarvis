@@ -8,6 +8,6 @@ export default function Login() {
     <p className="eyebrow">Acesso pessoal</p><h1>Entre no seu Jarvis.</h1>
     <p className="intro">Use sua conta Google para identificar seu acesso. Esta entrada não conecta Gmail, Drive ou Agenda.</p>
     <SignIn available={getAuth() !== null && process.env.JARVIS_CLOUD_LOGIN_ENABLED === "true"} />
-    <p className="muted">O histórico do Mac será vinculado em uma etapa posterior. Conversa e voz pelo celular ainda estão em preparação.</p>
+    <p className="muted">Acesse pelo celular ou computador para conversar com o Jarvis Nuvem, controlar o Jarvis Mac ou gerenciar aprovações remotas.</p>
   </>;
 }
