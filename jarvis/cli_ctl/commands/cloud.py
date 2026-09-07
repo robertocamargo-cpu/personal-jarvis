@@ -22,7 +22,7 @@ def pair(
     typer.echo(f"Connecting to {url} with pairing code {code.strip()}...")
     try:
         result = cloud_client.pair_device(code=code, cloud_url=url)
-        render.success(f"Successfully paired with cloud account {result['owner_id']}.")
+        render.line(f"[green]✓ Successfully paired with cloud account {result['owner_id']}.[/green]")
         typer.echo(f"Device ID: {result['device_id']}")
         typer.echo(f"Device Name: {result['device_name']}")
         typer.echo(f"Paired At: {result['paired_at']}")
@@ -59,6 +59,6 @@ def status() -> None:
 def unpair() -> None:
     """Disconnect and remove local pairing credentials."""
     if cloud_client.unpair_device():
-        render.success("Pairing credentials removed. Device is now unpaired.")
+        render.line("[green]✓ Pairing credentials removed. Device is now unpaired.[/green]")
     else:
         typer.echo("Device was not paired.")
