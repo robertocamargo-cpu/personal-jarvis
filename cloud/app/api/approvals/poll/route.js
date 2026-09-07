@@ -23,6 +23,11 @@ export async function GET(request) {
       { headers: PRIVATE_HEADERS }
     );
   } catch (error) {
-    return errorResponse(error);
+    const code = error instanceof ChatError ? error.code : "server_error";
+    const status = error instanceof ChatError ? error.status : 500;
+    return Response.json(
+      { error: code, detail: error?.message || String(error) },
+      { status, headers: PRIVATE_HEADERS }
+    );
   }
 }
