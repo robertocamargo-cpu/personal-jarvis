@@ -21,6 +21,7 @@ export default async function Account() {
       <article><span className="badge">Sua conta</span><h2>Histórico da nuvem</h2><p>As novas conversas ficam nesta conta. As conversas do Mac agora podem ser unificadas via pareamento.</p></article>
     </div>
     <DevicePairing />
+    <p><a className="button" href="/aprovacoes" style={{ background: "var(--accent)", color: "var(--button-text)", display: "inline-block" }}>🛡️ Aprovações do Mac no Celular</a></p>
     <p><a className="button secondary" href="/consumo">Ver consumo e custos</a></p>
     <p><a className="button secondary" href="/integracoes">Integrações Google</a></p>
     <SignOut />

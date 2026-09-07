@@ -1,4 +1,5 @@
 """Client for device pairing and authenticated communication between Jarvis Desktop and Cloud."""
+
 from __future__ import annotations
 
 import json
@@ -7,9 +8,10 @@ import platform
 import stat
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -76,13 +78,15 @@ def pair_device(code: str, cloud_url: str = DEFAULT_CLOUD_URL) -> dict[str, Any]
     device_id = get_installation_id()
     device_name = get_device_name()
 
-    payload = json.dumps({
-        "code": clean_code,
-        "device_id": device_id,
-        "device_name": device_name,
-    }).encode("utf-8")
+    payload = json.dumps(
+        {
+            "code": clean_code,
+            "device_id": device_id,
+            "device_name": device_name,
+        }
+    ).encode("utf-8")
 
-    req = urllib.request.Request(
+    req = urllib.request.Request(  # noqa: S310
         endpoint,
         data=payload,
         headers={
@@ -93,7 +97,7 @@ def pair_device(code: str, cloud_url: str = DEFAULT_CLOUD_URL) -> dict[str, Any]
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=10) as response:  # noqa: S310
             resp_bytes = response.read()
             result = json.loads(resp_bytes.decode("utf-8"))
     except urllib.error.HTTPError as exc:
@@ -103,7 +107,7 @@ def pair_device(code: str, cloud_url: str = DEFAULT_CLOUD_URL) -> dict[str, Any]
         try:
             err_json = json.loads(body)
             err_code = err_json.get("error", err_code)
-        except Exception:
+        except Exception:  # noqa: S110
             pass
 
         if status == 404:
@@ -114,7 +118,9 @@ def pair_device(code: str, cloud_url: str = DEFAULT_CLOUD_URL) -> dict[str, Any]
             raise ValueError("Código de pareamento expirou (validade: 10 minutos).") from exc
         raise RuntimeError(f"Erro no pareamento (HTTP {status}): {err_code}") from exc
     except urllib.error.URLError as exc:
-        raise ConnectionError(f"Não foi possível conectar à nuvem ({cloud_base}): {exc.reason}") from exc
+        raise ConnectionError(
+            f"Não foi possível conectar à nuvem ({cloud_base}): {exc.reason}"
+        ) from exc
 
     owner_id = result.get("owner_id")
     device_token = result.get("device_token")
@@ -127,7 +133,7 @@ def pair_device(code: str, cloud_url: str = DEFAULT_CLOUD_URL) -> dict[str, Any]
         "device_id": device_id,
         "device_name": device_name,
         "cloud_url": cloud_base,
-        "paired_at": datetime.now(timezone.utc).isoformat(),
+        "paired_at": datetime.now(UTC).isoformat(),
     }
 
     # Atomic safe write with 0600 permissions
@@ -155,3 +161,72 @@ def unpair_device() -> bool:
         except OSError:
             pass
     return False
+
+
+def publish_approval(
+    trace_id: str,
+    tool_name: str,
+    risk_tier: str = "ask",
+    reason: str = "",
+    args_preview: str = "",
+    expires_at_ns: int | None = None,
+) -> dict[str, Any]:
+    """Publish a pending tool approval to the Cloud for remote decision."""
+    pair_state = get_pairing_status()
+    if not pair_state:
+        raise RuntimeError("Dispositivo não pareado com a nuvem.")
+
+    cloud_base = pair_state.get("cloud_url", DEFAULT_CLOUD_URL).rstrip("/")
+    device_token = pair_state.get("device_token", "")
+    endpoint = f"{cloud_base}/api/approvals/publish"
+
+    payload_data = {
+        "trace_id": str(trace_id),
+        "tool_name": str(tool_name),
+        "risk_tier": str(risk_tier),
+        "reason": str(reason),
+        "args_preview": str(args_preview),
+    }
+    if expires_at_ns:
+        payload_data["expires_at_ns"] = expires_at_ns
+
+    payload = json.dumps(payload_data).encode("utf-8")
+
+    req = urllib.request.Request(  # noqa: S310
+        endpoint,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "x-jarvis-device-token": device_token,
+            "User-Agent": f"PersonalJarvis/{platform.system()}",
+        },
+        method="POST",
+    )
+
+    with urllib.request.urlopen(req, timeout=5) as response:  # noqa: S310
+        resp_bytes = response.read()
+        return json.loads(resp_bytes.decode("utf-8"))
+
+
+def poll_approval(trace_id: str) -> dict[str, Any]:
+    """Poll cloud approval status for a specific trace_id."""
+    pair_state = get_pairing_status()
+    if not pair_state:
+        raise RuntimeError("Dispositivo não pareado com a nuvem.")
+
+    cloud_base = pair_state.get("cloud_url", DEFAULT_CLOUD_URL).rstrip("/")
+    device_token = pair_state.get("device_token", "")
+    endpoint = f"{cloud_base}/api/approvals/poll?trace_id={urllib.parse.quote(str(trace_id))}"
+
+    req = urllib.request.Request(  # noqa: S310
+        endpoint,
+        headers={
+            "x-jarvis-device-token": device_token,
+            "User-Agent": f"PersonalJarvis/{platform.system()}",
+        },
+        method="GET",
+    )
+
+    with urllib.request.urlopen(req, timeout=5) as response:  # noqa: S310
+        resp_bytes = response.read()
+        return json.loads(resp_bytes.decode("utf-8"))

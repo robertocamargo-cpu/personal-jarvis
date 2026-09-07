@@ -1,4 +1,5 @@
 """cloud: manage pairing and cloud connectivity with Personal Jarvis Cloud."""
+
 from __future__ import annotations
 
 import typer
@@ -11,7 +12,9 @@ app = typer.Typer(no_args_is_help=True, help="Manage cloud pairing and connectiv
 
 @app.command()
 def pair(
-    code: str = typer.Argument(..., help="Single-use pairing code generated in the cloud (e.g. JRV-XXXX-XXXX)."),
+    code: str = typer.Argument(
+        ..., help="Single-use pairing code generated in the cloud (e.g. JRV-XXXX-XXXX)."
+    ),
     url: str = typer.Option(
         cloud_client.DEFAULT_CLOUD_URL,
         "--url",
@@ -22,7 +25,9 @@ def pair(
     typer.echo(f"Connecting to {url} with pairing code {code.strip()}...")
     try:
         result = cloud_client.pair_device(code=code, cloud_url=url)
-        render.line(f"[green]✓ Successfully paired with cloud account {result['owner_id']}.[/green]")
+        render.line(
+            f"[green]✓ Successfully paired with cloud account {result['owner_id']}.[/green]"
+        )
         typer.echo(f"Device ID: {result['device_id']}")
         typer.echo(f"Device Name: {result['device_name']}")
         typer.echo(f"Paired At: {result['paired_at']}")
@@ -62,3 +67,34 @@ def unpair() -> None:
         render.line("[green]✓ Pairing credentials removed. Device is now unpaired.[/green]")
     else:
         typer.echo("Device was not paired.")
+
+
+@app.command()
+def approvals(
+    trace_id: str | None = typer.Argument(None, help="Trace ID of the action to check status for."),
+) -> None:
+    """Check status of remote approvals in the cloud."""
+    paired = cloud_client.get_pairing_status()
+    if not paired:
+        render.error("Device is not paired with the cloud.")
+        raise typer.Exit(code=1)
+
+    if not trace_id:
+        typer.echo(f"Cloud Approvals Web UI: {paired.get('cloud_url')}/aprovacoes")
+        typer.echo("To inspect a specific action status, provide its trace ID:")
+        typer.echo("  jarvis cloud approvals <TRACE_ID>")
+        return
+
+    try:
+        res = cloud_client.poll_approval(trace_id)
+        approval = res.get("approval", {})
+        typer.echo(f"Trace ID:    {approval.get('trace_id')}")
+        typer.echo(f"Tool Name:   {approval.get('tool_name')}")
+        typer.echo(f"Status:      {approval.get('status')}")
+        if approval.get("decision_by"):
+            typer.echo(f"Decided By:  {approval.get('decision_by')}")
+        if approval.get("decision_reason"):
+            typer.echo(f"Reason:      {approval.get('decision_reason')}")
+    except Exception as exc:
+        render.error(f"Failed to fetch approval status: {exc}")
+        raise typer.Exit(code=1) from exc

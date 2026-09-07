@@ -108,4 +108,19 @@ export class PairingStore {
     );
     return rows[0] || null;
   }
+
+  async authenticateDevice(deviceToken) {
+    if (!deviceToken || typeof deviceToken !== "string") {
+      throw new ChatError(401, "device_unauthorized");
+    }
+    const tokenHash = hashToken(deviceToken);
+    const { rows } = await this.pool.query(
+      "SELECT owner_id, device_id, device_name, claimed_at FROM cloud_device_pairings_v1 WHERE device_token_hash=$1 AND status='claimed' LIMIT 1",
+      [tokenHash]
+    );
+    if (!rows || rows.length === 0) {
+      throw new ChatError(401, "device_unauthorized");
+    }
+    return rows[0];
+  }
 }
