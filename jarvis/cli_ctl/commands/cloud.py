@@ -116,10 +116,16 @@ def bridge() -> None:
     typer.echo(f"Connected to {paired.get('cloud_url')} as {paired.get('device_name')}")
     typer.echo("Listening for messages sent to 'Jarvis Mac'... (Press Ctrl+C to stop)")
 
-    bridge_worker = CloudChatBridge()
-    bridge_worker.start()
+    async def _runner() -> None:
+        bridge_worker = CloudChatBridge()
+        bridge_worker.start()
+        try:
+            while True:
+                await asyncio.sleep(1)
+        finally:
+            bridge_worker.stop()
+
     try:
-        asyncio.run(asyncio.Event().wait())
+        asyncio.run(_runner())
     except (KeyboardInterrupt, SystemExit):
-        bridge_worker.stop()
         typer.echo("\nBridge stopped.")
