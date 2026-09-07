@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getAuth } from "../../lib/auth/server";
 import { accountFromSession } from "../../lib/auth/config.mjs";
 import { ApprovalsList } from "./approvals-list";
+import { PushToggle } from "./push-toggle";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +28,8 @@ export default async function ApprovalsPage() {
       <p className="intro">
         Autorize ou recuse ferramentas sensíveis disparadas pelo Jarvis no seu Mac, em tempo real pelo celular.
       </p>
+
+      <PushToggle />
 
       <ApprovalsList />
 

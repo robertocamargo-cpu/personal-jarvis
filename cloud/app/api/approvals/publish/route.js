@@ -53,6 +53,21 @@ export async function POST(request) {
       expiresAt: parsed.expiresAt,
     });
 
+    // Disparar Web Push para os celulares do usuário
+    try {
+      const { getPushStore } = await import("../../../../lib/push/server");
+      const { broadcastPushToOwner } = await import("../../../../lib/push/sender.mjs");
+      const pushStore = getPushStore();
+      broadcastPushToOwner(pushStore, device.owner_id, {
+        title: `⚠️ Aprovação: ${parsed.toolName}`,
+        body: parsed.reason ? `${parsed.reason}` : "O Jarvis no Mac solicitou autorização.",
+        url: "/aprovacoes",
+        tag: `approval-${parsed.traceId}`,
+      }).catch((err) => console.error("Push broadcast error:", err));
+    } catch (pushErr) {
+      console.error("Push init error:", pushErr);
+    }
+
     return Response.json(
       { success: true, approval: result },
       { headers: PRIVATE_HEADERS }

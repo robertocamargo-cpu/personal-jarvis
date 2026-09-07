@@ -230,3 +230,73 @@ def poll_approval(trace_id: str) -> dict[str, Any]:
     with urllib.request.urlopen(req, timeout=5) as response:  # noqa: S310
         resp_bytes = response.read()
         return json.loads(resp_bytes.decode("utf-8"))
+
+
+def poll_mac_messages() -> list[dict[str, Any]]:
+    """Poll cloud for pending chat messages addressed to this Mac."""
+    pair_state = get_pairing_status()
+    if not pair_state:
+        return []
+
+    cloud_base = pair_state.get("cloud_url", DEFAULT_CLOUD_URL).rstrip("/")
+    device_token = pair_state.get("device_token", "")
+    endpoint = f"{cloud_base}/api/mac/messages/poll"
+
+    req = urllib.request.Request(  # noqa: S310
+        endpoint,
+        headers={
+            "x-jarvis-device-token": device_token,
+            "User-Agent": f"PersonalJarvis/{platform.system()}",
+        },
+        method="GET",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=5) as response:  # noqa: S310
+            resp_bytes = response.read()
+            data = json.loads(resp_bytes.decode("utf-8"))
+            return data.get("messages", [])
+    except Exception:  # noqa: S110
+        return []
+
+
+def reply_mac_message(
+    request_id: str,
+    assistant_text: str,
+    status: str = "complete",
+    error: str | None = None,
+) -> bool:
+    """Send assistant reply back to cloud for a processed message."""
+    pair_state = get_pairing_status()
+    if not pair_state:
+        return False
+
+    cloud_base = pair_state.get("cloud_url", DEFAULT_CLOUD_URL).rstrip("/")
+    device_token = pair_state.get("device_token", "")
+    endpoint = f"{cloud_base}/api/mac/messages/reply"
+
+    payload = json.dumps(
+        {
+            "requestId": str(request_id),
+            "assistantText": str(assistant_text),
+            "status": str(status),
+            "error": error,
+        }
+    ).encode("utf-8")
+
+    req = urllib.request.Request(  # noqa: S310
+        endpoint,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "x-jarvis-device-token": device_token,
+            "User-Agent": f"PersonalJarvis/{platform.system()}",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=5) as response:  # noqa: S310
+            return response.status == 200
+    except Exception:  # noqa: S110
+        return False
