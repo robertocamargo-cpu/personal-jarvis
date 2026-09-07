@@ -10,7 +10,11 @@ not block automated checks.
   usage and cost estimates, daily quota and incomplete attempts. Real Neon
   tests passed for account isolation, aggregation and the local-date boundary.
   The feature reads existing records without paid provider calls or schema
-  changes. Production and browser acceptance are checked separately.
+  changes. Commit `737a3f444` was pushed and its Vercel production deployment
+  reached READY. The authenticated browser showed the two existing completed
+  test turns: 230 input tokens, 15 output tokens and USD 0.000029 estimated.
+  Chat-to-usage navigation and anonymous usage-page rejection passed. No new
+  paid provider request was made during this milestone.
 
 - Cloud text chat is implemented at `/chat`, using verified Google account
   ownership, streamed Brazilian Portuguese replies and separate PostgreSQL
