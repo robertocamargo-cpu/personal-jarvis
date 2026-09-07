@@ -10,8 +10,14 @@ not block automated checks.
   ownership, streamed Brazilian Portuguese replies and separate PostgreSQL
   history. The configured model is Gemini 2.5 Flash-Lite. The real Neon branch
   test, Node 22 build, one-key provider call and 526 contract/core tests passed.
-  Publication and authenticated acceptance are being checked separately; see
-  `CLOUD_CHAT.md`. Mac pairing, central desktop storage migration and the Local
+  GitHub publication and Vercel production READY were confirmed for `94e5b1c3f`.
+  The authenticated browser completed two short turns, reloaded and selected
+  the persisted conversation, then correctly recalled a synthetic keyword from
+  the earlier turn. Displayed estimates were USD 0.000015 and USD 0.000014.
+  Public HTTP checks rejected anonymous/forged sessions and foreign-origin
+  chat mutations. Manifest, icons and installation-instruction checks passed.
+  A physical phone test remains unperformed. See `CLOUD_CHAT.md`.
+  Mac pairing, central desktop storage migration and the Local
   Bridge remain deferred by the user.
 
 - Mobile installation foundation: `/instalar`, standalone Web App Manifest,
@@ -79,13 +85,14 @@ proof of a connected Telegram account or cross-channel approval delivery.
 Codex Remote is a separate control plane for development approvals. Its device
 pairing has not been verified here and it does not publish the Jarvis UI.
 
-## Next prerequisites
+## Deferred prerequisites for local/cloud unification
 
 Trusted-domain configuration and authenticated account-page acceptance are
 complete. Authenticated cloud owner pairing remains pending. The designated
 Neon project is already provisioned.
-The storage inventory is prepared in `STORAGE_MIGRATION_INVENTORY.md`. Cloud
-CRUD, deployment, mobile pairing and human audio acceptance remain pending.
+The storage inventory is prepared in `STORAGE_MIGRATION_INVENTORY.md`. Unified
+desktop/cloud CRUD, installation pairing and human audio acceptance remain
+pending. The separate cloud text chat does not depend on these deferred steps.
 
 ## Continuation check: local source unavailable
 

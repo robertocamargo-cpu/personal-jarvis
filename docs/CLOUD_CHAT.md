@@ -71,4 +71,8 @@ The production build passed on Node 22/macOS. The Python contract plus the four
 required core guards passed: 526 tests. A real one-key Flash-Lite request
 returned the requested Portuguese test phrase: 89 input tokens and 6 output
 tokens, estimated USD 0.0000113. Authenticated deployed acceptance is tracked
-in `INSTALLATION_PROGRESS.md`; a build is not proof of a working phone session.
+in `INSTALLATION_PROGRESS.md`. Production `94e5b1c3f` reached Vercel READY;
+authenticated browser sending, saved-history selection after reload and a
+follow-up requiring the earlier synthetic context all passed. Public HTTP
+authorization, cross-origin rejection and PWA checks also passed. A physical
+phone session and Windows execution have not been tested.
