@@ -353,6 +353,24 @@ shortcuts it never created. Covered by
 
 ## Maintenance
 
+### Cloud Google read-only integration — 2026-09-06
+
+T3: `googleConfiguration` gates one optional Node OAuth transport. The browser
+and server HTTP contracts are the same across platforms, with no desktop
+imports or native APIs. Existing desktop plugins remain unchanged.
+
+| Cell | Evidence / behavior |
+| --- | --- |
+| macOS / Node 22 | Build, policy tests and real Neon state/refresh contracts passed |
+| Linux / Vercel | Same Node source; deployment checked independently from Google consent |
+| Windows | Same portable code and contract probe; not executed on Windows |
+| Python-only / headless | Optional Node contract skips when unavailable; desktop boot unchanged |
+
+`tests/contract/test_cloud_google.py` exercises the OAuth/read policy family;
+`cloud/tests/google-postgres.test.mjs` covers persistence and concurrency.
+Real Google consent and API reads are pending setup; no end-to-end activation
+is claimed. See `CLOUD_GOOGLE.md` for scope and deployment prerequisites.
+
 ### Cloud text chat — 2026-09-06
 
 T3: an optional Node HTTP transport with a single `chatConfiguration` capability

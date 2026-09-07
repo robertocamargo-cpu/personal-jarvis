@@ -6,6 +6,13 @@ not block automated checks.
 
 ## Latest follow-up
 
+- The user chose Google integration before remote approvals. A separate OAuth
+  client and read-only Gmail/Calendar/Drive surface are implemented behind a
+  disabled capability gate. Synthetic real-Neon authorization tests and 527
+  contract/core tests passed. The selected Google Cloud account requires an
+  interactive identity check before client registration can continue. No Google
+  service is connected yet; see `CLOUD_GOOGLE.md`.
+
 - The authenticated `/consumo` view now reports 30-day cloud text-chat token
   usage and cost estimates, daily quota and incomplete attempts. Real Neon
   tests passed for account isolation, aggregation and the local-date boundary.

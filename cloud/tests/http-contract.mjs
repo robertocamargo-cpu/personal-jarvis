@@ -22,6 +22,14 @@ assert.equal(new URL(chat.headers.get("location"), base).pathname, "/entrar");
 const usage = await fetch(new URL("/consumo?owner_id=forged", base), { redirect: "manual" });
 assert.equal(usage.status, 307, "Usage is private and ignores submitted owner identity");
 assert.equal(new URL(usage.headers.get("location"), base).pathname, "/entrar");
+const integrations = await fetch(new URL("/integracoes", base), { redirect: "manual" });
+assert.equal(integrations.status, 307);
+for (const path of ["/api/google", "/api/google/connect"]) {
+  const response = await fetch(new URL(path, base), {method:"POST",headers:{origin:new URL(base).origin,"content-type":"application/json"},body:"{}"});
+  assert.equal(response.status,401,"Google connection operations require a verified account");
+  const foreign = await fetch(new URL(path, base), {method:"POST",headers:{origin:"https://evil.example"}});
+  assert.equal(foreign.status,403);
+}
 for (const method of ["GET", "POST"]) {
   const response = await fetch(new URL("/api/chat?owner_id=forged", base), {
     method, headers: { origin: new URL(base).origin, "content-type": "application/json" },
