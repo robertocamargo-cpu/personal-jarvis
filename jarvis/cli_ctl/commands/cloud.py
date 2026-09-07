@@ -98,3 +98,28 @@ def approvals(
     except Exception as exc:
         render.error(f"Failed to fetch approval status: {exc}")
         raise typer.Exit(code=1) from exc
+
+
+@app.command()
+def bridge() -> None:
+    """Run the cloud chat bridge worker to process messages sent from cloud mobile chat."""
+    import asyncio
+
+    from jarvis.cloud.chat_bridge import CloudChatBridge
+
+    paired = cloud_client.get_pairing_status()
+    if not paired:
+        render.error("Device is not paired with the cloud.")
+        raise typer.Exit(code=1)
+
+    typer.echo("Starting Jarvis Cloud Chat Bridge...")
+    typer.echo(f"Connected to {paired.get('cloud_url')} as {paired.get('device_name')}")
+    typer.echo("Listening for messages sent to 'Jarvis Mac'... (Press Ctrl+C to stop)")
+
+    bridge_worker = CloudChatBridge()
+    bridge_worker.start()
+    try:
+        asyncio.run(asyncio.Event().wait())
+    except (KeyboardInterrupt, SystemExit):
+        bridge_worker.stop()
+        typer.echo("\nBridge stopped.")
