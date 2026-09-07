@@ -36,7 +36,7 @@ export function DevicePairing() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error ? `Erro: ${data.error}` : `Erro HTTP ${res.status}`);
+        throw new Error(data.detail ? `Erro: ${data.detail}` : data.error ? `Erro: ${data.error}` : `Erro HTTP ${res.status}`);
       }
       setPairing(data);
     } catch (err) {

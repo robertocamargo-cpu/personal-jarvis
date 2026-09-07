@@ -23,6 +23,11 @@ export async function POST(request) {
     const pairing = await store.createPairing(owner);
     return Response.json(pairing, { headers: PRIVATE_HEADERS });
   } catch (error) {
-    return errorResponse(error);
+    const code = error instanceof ChatError ? error.code : "database_error";
+    const status = error instanceof ChatError ? error.status : 500;
+    return Response.json(
+      { error: code, detail: error?.message || String(error) },
+      { status, headers: PRIVATE_HEADERS }
+    );
   }
 }
