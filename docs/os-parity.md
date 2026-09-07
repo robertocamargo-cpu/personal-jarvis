@@ -353,6 +353,22 @@ shortcuts it never created. Covered by
 
 ## Maintenance
 
+### Authenticated desktop/cloud pairing — 2026-09-06
+
+T3: cryptographic device pairing connecting the physical desktop installation
+with the verified cloud account. Single-use ephemeral codes (10-minute lifetime,
+SHA-256 hashed) and signed device tokens isolate owners across machines.
+
+| Cell | Evidence / behavior |
+| --- | --- |
+| macOS / Python 3.14 | CLI command `jarvis cloud pair/status/unpair`, 0600 credentials file, tests passed |
+| Linux / Vercel | Portable Next.js claim/revoke API, build passed, Node tests passed |
+| Windows | Same portable Python client and Node contract; file permissions adapt to platform |
+| Headless / API | Pure HTTP/JSON claim protocol; no browser window required |
+
+`tests/contract/test_cloud_pairing.py` exercises the claim and error protocol;
+`cloud/tests/pairing.test.mjs` covers code generation, validation and mock store.
+
 ### Cloud Google read-only integration — 2026-09-06
 
 T3: `googleConfiguration` gates one optional Node OAuth transport. The browser

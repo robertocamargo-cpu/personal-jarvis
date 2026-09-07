@@ -1,0 +1,60 @@
+import { getPublicPairingStore } from "../../../../lib/pairing/server";
+import { parseClaimPayload } from "../../../../lib/pairing/policy.mjs";
+import { ChatError } from "../../../../lib/chat/policy.mjs";
+import { errorResponse, PRIVATE_HEADERS } from "../../../../lib/chat/handler.mjs";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export async function POST(request) {
+  try {
+    const { store } = getPublicPairingStore();
+    if (!request.headers.get("content-type")?.startsWith("application/json")) {
+      throw new ChatError(415, "invalid_request");
+    }
+
+    const reader = request.body?.getReader();
+    if (!reader) throw new ChatError(400, "invalid_request");
+
+    const chunks = [];
+    let size = 0;
+    try {
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        size += value.length;
+        if (size > 1024) {
+          await reader.cancel();
+          throw new ChatError(413, "invalid_request");
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+
+    let body;
+    try {
+      body = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+    } catch {
+      throw new ChatError(400, "invalid_request");
+    }
+
+    const claimData = parseClaimPayload(body);
+    const result = await store.claimPairing(claimData);
+
+    return Response.json(
+      {
+        success: true,
+        owner_id: result.ownerId,
+        device_token: result.deviceToken,
+        device_id: result.deviceId,
+        device_name: result.deviceName,
+        cloud_url: "https://jarvis-bob.vercel.app",
+      },
+      { headers: PRIVATE_HEADERS }
+    );
+  } catch (error) {
+    return errorResponse(error);
+  }
+}

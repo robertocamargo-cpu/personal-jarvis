@@ -121,7 +121,7 @@ COMMAND_INDEX: dict[str, tuple[str, ...]] = {
         'message <name> "<text>"',
     ),
     "frontier": ("pending", "ack"),
-    "ide": ("rename-terminal", "close-terminals"),
+    "ide": ("rename-terminal", "archive-terminal", "close-terminals"),
     "local-models": (
         "roles list",
         "roles set <chat|tools_screen|deep|embedding> <model>",
@@ -168,6 +168,8 @@ COMMAND_INDEX: dict[str, tuple[str, ...]] = {
     "permissions": ("status", "request", "open-settings"),
     "socials": ("list", "add", "edit", "delete"),
     "telephony": ("status", "config", "outbound"),
+    "costs": ("summary", "entries", "rates"),
+    "cloud": ("pair <code_or_args>", "status", "unpair"),
 }
 
 #: Top-level commands that are not in a group.

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getAuth } from "../../lib/auth/server";
 import { accountFromSession } from "../../lib/auth/config.mjs";
 import { SignOut } from "./sign-out";
+import { DevicePairing } from "./device-pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,11 @@ export default async function Account() {
     <p className="intro">Você entrou como {account.email}.</p>
     <div className="grid">
       <article><span className="badge">Conversa por texto</span><h2>Jarvis na nuvem</h2><p>Converse em português, pelo computador ou celular, sem depender do Mac.</p><p><a className="button" href="/chat">Abrir conversa</a></p></article>
-      <article><span className="badge">Sua conta</span><h2>Histórico da nuvem</h2><p>As novas conversas ficam nesta conta. A integração com o Mac, voz e aprovações remotas serão adicionadas em próximas etapas.</p></article>
-    </div><p><a className="button secondary" href="/consumo">Ver consumo e custos</a></p><p><a className="button secondary" href="/integracoes">Integrações Google</a></p><SignOut />
+      <article><span className="badge">Sua conta</span><h2>Histórico da nuvem</h2><p>As novas conversas ficam nesta conta. As conversas do Mac agora podem ser unificadas via pareamento.</p></article>
+    </div>
+    <DevicePairing />
+    <p><a className="button secondary" href="/consumo">Ver consumo e custos</a></p>
+    <p><a className="button secondary" href="/integracoes">Integrações Google</a></p>
+    <SignOut />
   </>;
 }

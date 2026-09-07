@@ -22,6 +22,7 @@ from jarvis.cli_ctl.commands import auth as auth_cmd
 from jarvis.cli_ctl.commands import board as board_cmd
 from jarvis.cli_ctl.commands import brain as brain_cmd
 from jarvis.cli_ctl.commands import clis as clis_cmd
+from jarvis.cli_ctl.commands import cloud as cloud_cmd
 from jarvis.cli_ctl.commands import commands as commands_cmd
 from jarvis.cli_ctl.commands import computer_use as computer_use_cmd
 from jarvis.cli_ctl.commands import conductor as conductor_cmd
@@ -134,6 +135,7 @@ app.add_typer(docs_cmd.app, name="docs")
 app.add_typer(frontier_cmd.app, name="frontier")
 app.add_typer(ide_cmd.app, name="ide")
 app.add_typer(local_models_cmd.app, name="local-models")
+app.add_typer(cloud_cmd.app, name="cloud")
 
 
 def _in_completion() -> bool:

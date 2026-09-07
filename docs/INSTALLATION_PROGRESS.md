@@ -6,6 +6,15 @@ not block automated checks.
 
 ## Latest follow-up
 
+- Authenticated desktop/cloud pairing is implemented. The cloud web app generates
+  ephemeral single-use pairing codes (`JRV-XXXX-XXXX`, 10-minute lifetime, SHA-256 hashed)
+  in `/conta` and exposes `/api/pair` for device registration and token verification.
+  The desktop CLI introduces `jarvis cloud pair <CODE>`, `jarvis cloud status`, and
+  `jarvis cloud unpair` with atomic 0600 credentials storage.
+  Node tests passed (23 passed), Python contract tests passed (2 passed),
+  command index and parity tests passed, and Next.js production build passed.
+  Migration `003_device_pairings.sql` is prepared for deployment.
+
 - The user chose Google integration before remote approvals. A separate OAuth
   client and read-only Gmail/Calendar/Drive surface are implemented behind a
   disabled capability gate. Synthetic real-Neon authorization tests and 527
