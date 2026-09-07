@@ -34,10 +34,10 @@ export function DevicePairing() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error("Não foi possível gerar o código.");
+        throw new Error(data.error ? `Erro: ${data.error}` : `Erro HTTP ${res.status}`);
       }
-      const data = await res.json();
       setPairing(data);
     } catch (err) {
       setError(err.message || "Erro ao gerar código");
