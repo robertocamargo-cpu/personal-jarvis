@@ -11,7 +11,16 @@ export default async function ChatPage() {
   if (error) return <><h1>Sessão indisponível</h1><p>Tente novamente em alguns instantes.</p></>;
   const account = accountFromSession(data);
   if (!account) redirect("/entrar");
-  try { requireChatAccount(account, chatConfiguration()); }
-  catch { return <><h1>Seu chat está em preparação</h1><p>A conversa será liberada para sua conta após a configuração. <a href="/conta">Voltar à conta</a></p></>; }
-  return <Chat />;
+
+  let cloudAvailable = false;
+  try {
+    const config = chatConfiguration();
+    if (config && requireChatAccount(account, config)) {
+      cloudAvailable = true;
+    }
+  } catch {
+    cloudAvailable = false;
+  }
+
+  return <Chat cloudAvailable={cloudAvailable} userEmail={account.email} />;
 }

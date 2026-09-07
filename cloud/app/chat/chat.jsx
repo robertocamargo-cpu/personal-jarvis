@@ -18,7 +18,7 @@ async function readJson(response) {
   if (!response.ok) throw new Error(data.error || "unavailable");
   return data;
 }
-export function Chat() {
+export function Chat({ cloudAvailable = true, userEmail = "" } = {}) {
   const [conversations, setConversations] = useState([]);
   const [current, setCurrent] = useState(null);
   const [turns, setTurns] = useState([]);
@@ -27,18 +27,29 @@ export function Chat() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [budget, setBudget] = useState({ used: 0, limit: 50 });
-  const [target, setTarget] = useState("cloud"); // "cloud" | "mac"
+  const [target, setTarget] = useState(cloudAvailable ? "cloud" : "mac"); // "cloud" | "mac"
   const active = useRef(false);
   const request = useRef(null);
   const bottom = useRef(null);
   async function refreshList() {
-    const data = await readJson(await fetch("/api/chat", { cache: "no-store" }));
-    setConversations(data.conversations); setBudget(data.budget);
+    if (!cloudAvailable) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const data = await readJson(await fetch("/api/chat", { cache: "no-store" }));
+      setConversations(data.conversations || []);
+      setBudget(data.budget || { used: 0, limit: 50 });
+    } catch (e) {
+      console.warn("Cloud chat history unavailable:", e);
+    } finally {
+      setLoading(false);
+    }
   }
   useEffect(() => {
-    refreshList().catch(e => setError(messageFor(e.message))).finally(() => setLoading(false));
+    refreshList();
     return () => request.current?.abort();
-  }, []);
+  }, [cloudAvailable]);
   useEffect(() => { bottom.current?.scrollIntoView({ block: "nearest" }); }, [turns]);
   async function open(id) {
     if (active.current) return;
@@ -143,19 +154,40 @@ export function Chat() {
       <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
         <button
           type="button"
-          className={target === "cloud" ? "button" : "button secondary"}
-          style={{ padding: "10px 18px", fontSize: "14px", borderRadius: "10px", border: target === "cloud" ? "2px solid var(--accent)" : "1px solid var(--line)" }}
-          onClick={() => setTarget("cloud")}
+          className={target === "mac" ? "button" : "button secondary"}
+          style={{
+            padding: "10px 18px",
+            fontSize: "14px",
+            borderRadius: "10px",
+            border: target === "mac" ? "2px solid var(--accent)" : "1px solid var(--line)",
+          }}
+          onClick={() => {
+            setTarget("mac");
+            setError("");
+          }}
         >
-          ☁️ Jarvis Nuvem (Gemini)
+          🖥️ Jarvis Mac (Darwin)
         </button>
         <button
           type="button"
-          className={target === "mac" ? "button" : "button secondary"}
-          style={{ padding: "10px 18px", fontSize: "14px", borderRadius: "10px", border: target === "mac" ? "2px solid var(--accent)" : "1px solid var(--line)" }}
-          onClick={() => setTarget("mac")}
+          className={target === "cloud" ? "button" : "button secondary"}
+          style={{
+            padding: "10px 18px",
+            fontSize: "14px",
+            borderRadius: "10px",
+            border: target === "cloud" ? "2px solid var(--accent)" : "1px solid var(--line)",
+            opacity: cloudAvailable ? 1 : 0.8,
+          }}
+          onClick={() => {
+            if (!cloudAvailable) {
+              setError("O Jarvis Nuvem (Gemini) requer que as variáveis GEMINI_API_KEY, JARVIS_CLOUD_CHAT_ENABLED=true e JARVIS_CHAT_ALLOWED_EMAILS estejam na Vercel. Você pode conversar diretamente com o seu Mac pelo modo Jarvis Mac!");
+            } else {
+              setTarget("cloud");
+              setError("");
+            }
+          }}
         >
-          🖥️ Jarvis Mac (Darwin)
+          ☁️ Jarvis Nuvem {cloudAvailable ? "(Gemini)" : "(Configuração pendente)"}
         </button>
       </div>
       <a href="/aprovacoes" className="button secondary" style={{ fontSize: "13px", padding: "8px 14px", textDecoration: "none" }}>
@@ -163,9 +195,9 @@ export function Chat() {
       </a>
     </div>
     <p className="muted" style={{ fontSize: "13px", margin: "0 0 16px" }}>
-      {target === "cloud" 
-        ? "Modo atual: Nuvem (Gemini). Respostas imediatas geradas pela nuvem." 
-        : "Modo atual: Jarvis Mac. Mensagens são enviadas para o seu computador e executadas localmente."}
+      {target === "mac"
+        ? "Modo atual: 🖥️ Jarvis Mac (Darwin). Mensagens são enviadas para o seu computador e respondidas localmente pelo assistente."
+        : "Modo atual: ☁️ Nuvem (Gemini). Respostas imediatas geradas pela inteligência na nuvem."}
     </p>
 
     <div className="chat-controls"><button className="secondary" disabled={busy || loading} onClick={newChat}>Nova conversa</button>
